@@ -24,5 +24,10 @@
   "bugs": {
     "url": "https://github.com/CodenNerd/TeamWork/issues"
   },
-  "homepage": "https://github.com/CodenNerd/TeamWork#readme"
+  "homepage": "https://github.com/CodenNerd/TeamWork#readme",
+  "devDependencies": {
+    "eslint": "^6.6.0",
+    "eslint-config-airbnb-base": "^14.0.0",
+    "eslint-plugin-import": "^2.18.2"
+  }
 }
