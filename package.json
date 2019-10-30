@@ -1,0 +1,28 @@
+{
+  "name": "teamwork",
+  "version": "1.0.0",
+  "description": "Teamwork is an internal social network for employees of an organization. The goal of this",
+  "main": "server.js",
+  "scripts": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/CodenNerd/TeamWork.git"
+  },
+  "keywords": [
+    "Andela",
+    "Facebook",
+    "DevC",
+    "OpenClassrooms",
+    "social",
+    "employees",
+    "teamwork"
+  ],
+  "author": "AbdulAzeez Atanda",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/CodenNerd/TeamWork/issues"
+  },
+  "homepage": "https://github.com/CodenNerd/TeamWork#readme"
+}
