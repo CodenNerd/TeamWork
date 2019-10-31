@@ -4,7 +4,8 @@
   "description": "Teamwork is an internal social network for employees of an organization. The goal of this",
   "main": "server.js",
   "scripts": {
-    "test": "test"
+    "test": "test",
+    "lint": "eslint"
   },
   "repository": {
     "type": "git",
@@ -24,5 +25,13 @@
   "bugs": {
     "url": "https://github.com/CodenNerd/TeamWork/issues"
   },
-  "homepage": "https://github.com/CodenNerd/TeamWork#readme"
+  "homepage": "https://github.com/CodenNerd/TeamWork#readme",
+  "devDependencies": {
+    "eslint": "^6.6.0",
+    "eslint-config-airbnb": "^16.1.0",
+    "eslint-config-airbnb-base": "^14.0.0",
+    "eslint-plugin-import": "^2.7.0",
+    "eslint-plugin-jsx-a11y": "^6.0.1",
+    "eslint-plugin-react": "^7.4.0"
+  }
 }
