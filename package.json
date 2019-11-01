@@ -5,7 +5,8 @@
   "main": "server.js",
   "scripts": {
     "test": "mocha",
-    "lint": "eslint"
+    "lint": "eslint",
+    "start": "nodemon --exec babel-node server.js"
   },
   "repository": {
     "type": "git",
