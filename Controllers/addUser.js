@@ -1,18 +1,63 @@
-import { Pool } from 'pg';
+import pool from '../Models/queries';
 
 const addUser = (req, res) => {
-    //Validate request object
+
+    const query = `INSERT INTO teamwork.users(ID, firstName, lastName, email, password, gender, jobRole, department, address, datetime) VALUES ($1,$2, $3,$4, $5, $6, $7, $8)`
+    const { firstName, lastName, email, password, gender, jobRole, department, address } = req.body;
+    const params = [
+        UUID,
+        firstName, 
+        lastName, 
+        email, 
+        password, 
+        gender, 
+        jobRole, 
+        department, 
+        address,
+        new Date(),
+    ]
+    pool.query(query, params)
+        .then(response => {
+            if (response) {
+                return res.status(202).send({
+                    status: "success",
+                    data: {
+                        message: "User account successfully created",
+                        token: "String",
+                        userId: "Integer",
+                        response,
+                    }
+                })
+            }
+            return res.status(500).send('Server error');
+        })
+        .catch(e => {
+            console.error(e);
+            res.send(e)
+        })
 
 
-    // send if successful
-    res.status(202).send({
-        status: "success",
-        data: {
-            message: "User account successfully created",
-            token: String,
-            userId: Integer,
-        }
-    })
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 }
 
 export default addUser;
