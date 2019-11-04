@@ -1,12 +1,23 @@
 import pool from '../Models/queries';
 import uuid from 'uuid/v1';
+import schema from '../Models/joiSchema';
 
 const addUser = (req, res) => {
 
     //validation
+
     
     const query = `INSERT INTO teamwork.users(ID, firstName, lastName, email, password, gender, jobRole, department, address, datetime) VALUES ($1,$2, $3,$4, $5, $6, $7, $8, $9, $10)`
     const { firstName, lastName, email, password, gender, jobRole, department, address } = req.body;
+    
+   schema.validate({
+        firstName,
+        lastName,
+        email,
+        address
+    })
+
+    
     const params = [
         uuid(),
         firstName, 
@@ -28,7 +39,7 @@ const addUser = (req, res) => {
                         params,
                         message: "User account successfully created",
                         token: "String",
-                        userId: "Integer",
+                        userId: params[0],
                     
                     }
                 })

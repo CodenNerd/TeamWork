@@ -4,12 +4,12 @@ const schema = Joi.object({
     firstName: Joi.string()
                     .min(3)
                     .max(30)
-                    .alpha()
+                    .alphanum()
                     .required(),
     lastName: Joi.string()
                     .min(3)
                     .max(30)
-                    .alpha()
+                    .alphanum()
                     .required(),
     email: Joi.string()
                 .email({
