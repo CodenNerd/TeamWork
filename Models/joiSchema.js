@@ -16,6 +16,8 @@ const schema = Joi.object({
                     minDomainSegments:2
                 })
                 .required(),
+    jobRole: Joi.string()
+                .required(),
     address: Joi.string()
                 .alphanum()
 })
