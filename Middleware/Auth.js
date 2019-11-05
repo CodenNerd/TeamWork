@@ -1,5 +1,8 @@
 import jwt from 'jsonwebtoken';
 import pool from '../Models/queries';
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 const Auth = {
 
@@ -9,11 +12,15 @@ const Auth = {
       return res.status(400).send({ message: 'Token is not provided' });
     }
     try {
-      const decoded = await jwt.verify(token, process.env.SECRET);//install .env
-      const text = 'SELECT * FROM users WHERE id = $1';
+      const decoded = await jwt.verify(token, process.env.SECRET);
+      const text = 'SELECT * FROM teamwork.users WHERE ID = $1';
       const { rows } = await pool.query(text, [decoded.userId]);
       if (!rows[0]) {
-        return res.status(400).send({ message: 'The token you provided is invalid' });
+        return res.status(400).send({ 
+            rows,
+            id: decoded.userId,
+            message: 'The token you provided is invalid' 
+        });
       }
       req.user = { id: decoded.userId, usertype: rows[0].usertype };
       next();

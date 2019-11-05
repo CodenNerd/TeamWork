@@ -3,6 +3,9 @@ import uuid from 'uuid/v1';
 import schema from '../Models/joiSchema';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 const addUser = (req, res) => {
     if (req.user.usertype !== 'admin') return res.status(401).send({ message: 'you are not authorized to do this' });
@@ -76,7 +79,7 @@ const addUser = (req, res) => {
                                         message: "User account successfully created",
                                         token: jwt.sign({
                                             userId: rows[0].id
-                                        }, "so so cool", { expiresIn: '7d' }),
+                                        }, process.env.SECRET, { expiresIn: '7d' }),
                                         userId: params[0],
                                         params
                                     }
