@@ -5,6 +5,9 @@ import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
 
 const addUser = (req, res) => {
+    if (req.user.usertype !== 'admin') return res.status(401).send({ message: 'you are not authorized to do this' });
+
+
     const { firstName, lastName, email, password, gender, jobRole, userType, department, address } = req.body;
 
     const validate = schema.validate({

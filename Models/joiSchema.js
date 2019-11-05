@@ -19,7 +19,7 @@ const schema = Joi.object({
     jobRole: Joi.string()
                 .required(),
     address: Joi.string()
-                .alphanum()
+                
 })
 
 export default schema;
