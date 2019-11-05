@@ -1,6 +1,7 @@
 import pool from '../Models/queries';
 import uuid from 'uuid/v1';
 import schema from '../Models/joiSchema';
+import jwt from 'jsonwebtoken';
 
 const addUser = (req, res) => {
     const { firstName, lastName, email, password, gender, jobRole, department, address } = req.body;
@@ -29,7 +30,7 @@ const addUser = (req, res) => {
                     message: `A user with email:${email} already exists`,
                 })
             }
-            const query = `INSERT INTO teamwork.users(ID, firstName, lastName, email, password, gender, jobRole, department, address, datetime) VALUES ($1,$2, $3,$4, $5, $6, $7, $8, $9, $10)`
+            const query = `INSERT INTO teamwork.users(ID, firstName, lastName, email, password, gender, jobRole, department, address, datetime) VALUES ($1,$2, $3,$4, $5, $6, $7, $8, $9, $10) returning *`
 
             const params = [
                 uuid(),
@@ -44,13 +45,15 @@ const addUser = (req, res) => {
                 new Date(),
             ]
             pool.query(query, params)
-                .then(() => {
+                .then(({ rows }) => {
 
                     return res.status(202).send({
                         status: "success",
                         data: {
                             message: "User account successfully created",
-                            token: "String",
+                            token: jwt.sign({
+                                userId: rows[0].id
+                            }, "so so cool", { expiresIn: '7d' }),
                             userId: params[0],
 
                         }
