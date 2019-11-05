@@ -7,11 +7,14 @@ dotenv.config();
 
 const signin = {
     async login(req, res) {
-        const {email, password } = req.body;
+        let {email, password } = req.body;
+        email = email.trim();
+        password = password.trim();
+        
       if (!email || !password) {
         return res.status(400).send({ message: 'Some values are missing' });
       }
-      
+
       if (!Helper.isValidEmail(req.body.email)) {
         return res.status(400).send({ message: 'Please enter a valid email address' });
       }

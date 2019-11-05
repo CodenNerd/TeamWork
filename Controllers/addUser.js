@@ -11,8 +11,16 @@ const addUser = (req, res) => {
     if (req.user.usertype !== 'admin') return res.status(401).send({ message: 'you are not authorized to do this' });
 
 
-    const { firstName, lastName, email, password, gender, jobRole, userType, department, address } = req.body;
-
+    let { firstName, lastName, email, password, gender, jobRole, userType, department, address } = req.body;
+    firstName = firstName.trim();
+    lastName = lastName.trim();
+    email = email.trim();
+    password = password.trim();
+    gender = gender.trim();
+    jobRole = jobRole.trim();
+    userType = userType.trim();
+    department = department.trim();
+    address = address.trim();
     const validate = schema.validate({
         firstName,
         lastName,
@@ -28,19 +36,19 @@ const addUser = (req, res) => {
         })
     }
 
-    if(gender !== "male" && gender !== "female") {
+    if (gender !== "male" && gender !== "female") {
         return res.status(400).send({
             error: "validation error",
             message: "Invalid gender provided"
         })
     }
-    if(userType !== "admin" && userType !== "employee"){
+    if (userType !== "admin" && userType !== "employee") {
         return res.status(400).send({
             error: "validation error",
             message: "Invalid user type provided"
         })
     }
-    
+
     const checkDBQuery = `SELECT * from teamwork.users WHERE email = $1`;
 
 
