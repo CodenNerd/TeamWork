@@ -1,13 +1,16 @@
 import pool from 'pg';
 import schema from '../Models/createGifJoiSchema';
-import uuid from 'uuid/v1'
+import uuid from 'uuid/v1';
+import cloudinary from 'cloudinary';
+
 const createGif = {
     async newGif(req, res) {
         if (req.user.userType !== 'employee') return res.status(401).send({ message: 'please create an employee account to perform this task' });
         let { userId } = req.user;
-        let { image, title, caption } = req.body;
-
-        // multer ft cloudinary
+        let { title, caption } = req.body;
+        const {image } = req.file;
+        
+        //  cloudinary
         title = title.trim();
         caption = caption.trim();
 
