@@ -1,5 +1,4 @@
 import pool from '../Models/queries';
-import schema from '../Models/joiSchema';
 import dotenv from 'dotenv';
 import Helper from './Helper'
 
