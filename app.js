@@ -5,13 +5,15 @@ import fileUpload from 'express-fileupload';
 
 const app = express();
 
+
 app.use(urlencoded({
+    limit: '50mb',
     extended: true
 }));
-app.use(json());
+// app.use(json({limit: '50mb'}));
 app.use(fileUpload({
     useTempFiles: true,
-    limits: { fileSize: 50 * 1024 * 1024 }
+   // limits: { fileSize: 50 * 1024 * 1024 }
 }))
 app.use('/api/v1', apiVersion1);
 

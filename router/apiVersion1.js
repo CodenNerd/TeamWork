@@ -6,6 +6,8 @@ import createGif from '../Controllers/createGif';
 
 const api = Router();
 
+
+
 api.post('/auth/create-user', Auth, addUser);
 api.post('/signin', signIn);
 api.post('/auth/gifs', Auth, createGif)

@@ -1,16 +1,50 @@
-import pool from 'pg';
+import pool from '../Models/queries';
 import schema from '../Models/createGifJoiSchema';
 import uuid from 'uuid/v1';
-import cloudinary from 'cloudinary';
+import { v2 as cloudinary } from 'cloudinary';
 
+cloudinary.config({
+    cloud_name: `codennerd`,
+    api_key: 141424747197212,
+    api_secret: '9yRV3eKHg0dW74gUUpq9RFNFBL8'
+
+})
 const createGif = {
     async newGif(req, res) {
-        if (req.user.userType !== 'employee') return res.status(401).send({ message: 'please create an employee account to perform this task' });
+        // if (req.user.userType !== 'employee') return res.status(401).send({ message: 'please create an employee account to perform this task' });
         let { userId } = req.user;
         let { title, caption } = req.body;
-        const {image } = req.file;
-        
-        //  cloudinary
+        if (!req.files || Object.keys(req.files).length === 0) {
+            return res.status(400).send('No files were uploaded.');
+        }
+
+        const { image } = req.files;
+
+        if(image.mimetype !== `image/gif`){
+            return res.status(400).send({
+                status: `error`,
+                message: `Selected image must be GIF`
+            })
+        }
+
+        if (!title) {
+            res.status(400).send({
+                status: `error`,
+                message: `You need to provide a title`
+            })
+        }
+        // before upload, confirm the file is gif type
+        let imageURL;
+        await cloudinary.uploader.upload(image.tempFilePath, (err, result) => {
+            if (err) {
+                return res.status(500).send({
+                    status: err,
+                    message: `Error uploading image`
+                })
+            }
+            imageURL = result.secure_url;
+        })
+
         title = title.trim();
         caption = caption.trim();
 
@@ -20,16 +54,13 @@ const createGif = {
         })
 
         if (validate.error) {
-            res.status(400).send({
+            return res.status(400).send({
                 status: `error`,
                 message: validate.error.details[0].message
             })
         }
-        
-        const query = `INSERT INTO
-        teamwork.gifs(gifID, imageURL, title, caption, authorID, datetime)
-        VALUES($1, $2, $3, $4, $5, $6)
-        returning *`;
+
+        const query = `INSERT INTO teamwork.gifs(gifID, imageURL, title, caption, authorID, datetime) VALUES($1, $2, $3, $4, $5, $6) returning *`;
         const values = [
             uuid(),
             imageURL,
@@ -42,19 +73,19 @@ const createGif = {
         try {
             const { rows } = await pool.query(query, values);
             return res.status(201).send({
-                status: success,
+                status: `success`,
                 data: {
-                   gifId: rows[0].gifID,
-                   message: 'The menu has been created',
-                   createdOn: rows[0].datetime,
-                   title: rows[0].ID,
-                   imageURL: rows[0].imageURL
+                    gifId: rows[0].gifid,
+                    message: 'Gif uploaded successfully',
+                    createdOn: rows[0].datetime,
+                    title: rows[0].title,
+                    imageURL: rows[0].imageurl
                 }
-                ,
+               ,
             });
-        } catch (error) {  
-            return res.status(500).send({ error: 'Sorry, our server is down.' });
-        }
+       } catch (error) {
+           return res.status(500).send({ error: 'Sorry, our server is down.'  });
+       }
     },
 };
 
