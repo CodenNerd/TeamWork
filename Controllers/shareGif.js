@@ -1,12 +1,18 @@
 import pool from '../Models/queries';
 import uuid from 'uuid/v1';
+import Helper from './Helper'
 
 const shareGif = {
     async share(req, res) {
         // if (req.user.userType !== 'employee') return res.status(401).send({ message: 'please create an employee account to perform this task' });
         let { userId } = req.user;
 
-        
+        if (!Helper.isValidUUID(req.params.gifId) || !Helper.isValidUUID(req.params.recipientId)){
+            return res.status(400).send({
+                status: `error`,
+                message: `Wrong gif ID or recipient ID`
+            })
+        }
         const gifIDVerificationQuery = `SELECT * from teamwork.gifs WHERE gifid = $1`;
         try {
             const { rows } = await pool.query(gifIDVerificationQuery, [req.params.gifId])
