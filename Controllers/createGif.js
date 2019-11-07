@@ -20,12 +20,13 @@ const createGif = {
 
         const { image } = req.files;
 
-        if(image.mimetype !== `image/gif`){
+        if (image.mimetype !== `image/gif`) {
             return res.status(400).send({
                 status: `error`,
                 message: `Selected image must be GIF`
             })
         }
+        if (image.size > 20 * 1024 * 1024) return res.status(400).send({ status: `error`, message: `file size should not exceed 20mb` })
 
         if (!title) {
             res.status(400).send({
@@ -33,12 +34,11 @@ const createGif = {
                 message: `You need to provide a title`
             })
         }
-        // before upload, confirm the file is gif type
         let imageURL;
         await cloudinary.uploader.upload(image.tempFilePath, (err, result) => {
             if (err) {
                 return res.status(500).send({
-                    status: err,
+                    status: "error",
                     message: `Error uploading image`
                 })
             }
@@ -80,12 +80,14 @@ const createGif = {
                     createdOn: rows[0].datetime,
                     title: rows[0].title,
                     imageURL: rows[0].imageurl
-                }
-               ,
+                },
             });
-       } catch (error) {
-           return res.status(500).send({ error: 'Sorry, our server is down.'  });
-       }
+        } catch (error) {
+            return res.status(500).send({
+                status: `error`,
+                message: 'Sorry, our server is down.'
+            });
+        }
     },
 };
 
