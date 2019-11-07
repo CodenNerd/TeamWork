@@ -8,7 +8,7 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 const addUser = (req, res) => {
-    if (req.user.usertype !== 'admin') return res.status(401).send({ message: 'you are not authorized to do this' });
+    if (req.user.userType !== 'admin') return res.status(401).send({ message: 'you are not authorized to do this' });
 
 
     let { firstName, lastName, email, password, gender, jobRole, userType, department, address } = req.body;

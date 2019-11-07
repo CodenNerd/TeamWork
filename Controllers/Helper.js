@@ -14,6 +14,10 @@ const Helper = {
     return /\S+@\S+\.\S+/.test(email);
   },
 
+  isValidUUID(uuid){
+    return /^[0-9a-f]{8}-[0-9a-f]{4}-[0-5][0-9a-f]{3}-[089ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(uuid);
+  },
+
   generateToken(id) {
     const token = jwt.sign({
       userId: id,

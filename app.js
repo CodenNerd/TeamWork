@@ -1,12 +1,21 @@
 import express from 'express';
 import apiVersion1 from './router/apiVersion1';
-import { urlencoded,json } from 'body-parser';
+import { urlencoded, json } from 'body-parser';
+import fileUpload from 'express-fileupload';
+
 const app = express();
 
+
 app.use(urlencoded({
+    limit: '50mb',
     extended: true
 }));
-app.use(json());
+app.use(json({ limit: '50mb' }));
+app.use(fileUpload({
+    useTempFiles: true,
+}))
+
+
 app.use('/api/v1', apiVersion1);
 
 export default app;
