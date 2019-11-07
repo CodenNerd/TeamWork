@@ -1,7 +1,6 @@
 import pool from '../Models/queries';
 import uuid from 'uuid/v1';
 
-
 const shareGif = {
     async share(req, res) {
         // if (req.user.userType !== 'employee') return res.status(401).send({ message: 'please create an employee account to perform this task' });
@@ -46,8 +45,16 @@ const shareGif = {
             req.params.recipientId,
             new Date()
         ]
+        try{
         query = `INSERT into teamwork.sharedposts (shareid, postid, authorid, recipientid, datetime) VALUES ($1, $2, $3, $4, $5)`;
         await pool.query(query, values)
+        }
+        catch(err){
+            return res.status(500).send({
+                status: `error`,
+                message: `Oops! Could not share post`
+            })
+        }
     }
 };
 
