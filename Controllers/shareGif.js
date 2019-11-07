@@ -6,7 +6,8 @@ const shareGif = {
         // if (req.user.userType !== 'employee') return res.status(401).send({ message: 'please create an employee account to perform this task' });
         let { userId } = req.user;
 
-        gifIDVerificationQuery = `SELECT * from teamwork.gifs WHERE id = $1`;
+        
+        const gifIDVerificationQuery = `SELECT * from teamwork.gifs WHERE gifid = $1`;
         try {
             const { rows } = await pool.query(gifIDVerificationQuery, [req.params.gifId])
             if (!rows[0]) {
@@ -22,7 +23,7 @@ const shareGif = {
             })
         }
 
-        recipientIDVerificationQuery = `SELECT * from teamwork.user WHERE id = $1`;
+        const recipientIDVerificationQuery = `SELECT * from teamwork.userS WHERE id = $1`;
         try {
             const { rows } = await pool.query(recipientIDVerificationQuery, [req.params.recipientId])
             if (!rows[0]) {
@@ -31,6 +32,7 @@ const shareGif = {
                     message: `recipient not found`
                 })
             }
+            
         } catch (err) {
             return res.status(500).send({
                 status: `error`,
@@ -45,14 +47,26 @@ const shareGif = {
             req.params.recipientId,
             new Date()
         ]
+        console.log(values);
         try{
-        query = `INSERT into teamwork.sharedposts (shareid, postid, authorid, recipientid, datetime) VALUES ($1, $2, $3, $4, $5)`;
-        await pool.query(query, values)
+        const query = `INSERT into teamwork.sharedposts(shareid, postid, authorid, recipientID, datetime) VALUES ($1, $2, $3, $4, $5) returning *`;
+        const {rows} = await pool.query(query, values);
+        if(!rows[0]){
+            return res.status(500).send({
+                status: `error`,
+                message: `Error sharing post`
+            })
         }
+        return res.status(201).send({
+                    status: `success`,
+                    message: `GIF shared successfully`
+            })
+       }
         catch(err){
             return res.status(500).send({
                 status: `error`,
-                message: `Oops! Could not share post`
+                message: `Oops! Could not share post`,
+                err
             })
         }
     }
