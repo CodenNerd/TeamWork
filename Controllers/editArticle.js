@@ -1,12 +1,31 @@
 import pool from '../Models/queries';
 import schema from '../Models/createArticleJoiSchema';
-import uuid from 'uuid/v1';
 
-
-const createArticle = {
-    async newArticle(req, res) {
+const editArticle = {
+    async editArticle(req, res) {
         // if (req.user.userType !== 'employee') return res.status(401).send({ message: 'please create an employee account to perform this task' });
         let { userId } = req.user;
+
+        const verifyUserQuery = `SELECT * FROM teamwork.articles WHERE articleid = $1 and articleauthorid=$2`;
+        const verifyUserValues = [
+            req.params.articleId,
+            userId
+        ]
+        try {
+            const { rows } = await pool.query(verifyUserQuery, verifyUserValues)
+            if (!rows[0]) {
+                return res.status(401).send({
+                    status: `error`,
+                    message: `you are not allowed to edit this article`
+                })
+            }
+        } catch (err) {
+            return res.status(400).send({
+                status: `error`,
+                message: `could not verify article`
+            })
+        }
+
         let { title, content, tag } = req.body;
 
         if (!title) {
@@ -33,7 +52,7 @@ const createArticle = {
             tag
         })
 
-        if(validate.error){
+        if (validate.error) {
             return res.status(400).send({
                 status: `error`,
                 message: validate.error.details[0].message
@@ -43,29 +62,27 @@ const createArticle = {
         content = content.trim();
         tag = tag.trim();
 
-        const query = `INSERT INTO teamwork.articles(articleid, title, articlebody, tag, articleauthorid, datetime) VALUES($1, $2, $3, $4, $5, $6) returning *`;
+        const query = `UPDATE teamwork.articles SET title=$1, articlebody=$2, tag=$3 WHERE articleid = $4 returning *`;
         const values = [
-            uuid(),
             title,
             content,
             tag,
-            userId,
-            new Date(),
+            req.params.articleId,
         ];
 
         try {
             const { rows } = await pool.query(query, values);
-            if(!rows[0]){
+            if (!rows[0]) {
                 return res.status(500).send({
                     status: `error`,
-                    message: 'error posting article'
+                    message: 'error updating article'
                 });
             }
             return res.status(201).send({
                 status: `success`,
                 data: {
                     articleId: rows[0].articleid,
-                    message: 'Article posted successfully',
+                    message: 'Article updated successfully',
                     createdOn: rows[0].datetime,
                     title: rows[0].title,
                     tag: rows[0].tag,
@@ -80,4 +97,4 @@ const createArticle = {
     },
 };
 
-export default createArticle.newArticle;
+export default editArticle.editArticle;
