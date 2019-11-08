@@ -1,18 +1,13 @@
 import pool from '../Models/queries';
 import schema from '../Models/createArticleJoiSchema';
-import uuid from 'uuid/v1';
-import { verify } from 'crypto';
-
 
 const editArticle = {
     async editArticle(req, res) {
         // if (req.user.userType !== 'employee') return res.status(401).send({ message: 'please create an employee account to perform this task' });
         let { userId } = req.user;
 
-        // verify that article is edited by its author
-
-        verifyUserQuery = `SELECT * FROM teamwork.articles WHERE articleid = $1 and authorid=$2`;
-        verifyUserValues = [
+        const verifyUserQuery = `SELECT * FROM teamwork.articles WHERE articleid = $1 and articleauthorid=$2`;
+        const verifyUserValues = [
             req.params.articleId,
             userId
         ]
@@ -67,7 +62,7 @@ const editArticle = {
         content = content.trim();
         tag = tag.trim();
 
-        const query = `UPDATE teamwork.articles SET title=$1, content=$2, tag=$3 WHERE articleid = $4 returning *`;
+        const query = `UPDATE teamwork.articles SET title=$1, articlebody=$2, tag=$3 WHERE articleid = $4 returning *`;
         const values = [
             title,
             content,
@@ -80,7 +75,7 @@ const editArticle = {
             if (!rows[0]) {
                 return res.status(500).send({
                     status: `error`,
-                    message: 'error posting article'
+                    message: 'error updating article'
                 });
             }
             return res.status(201).send({
