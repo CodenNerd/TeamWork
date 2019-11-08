@@ -1,6 +1,7 @@
 import pool from '../Models/queries';
 import schema from '../Models/createArticleJoiSchema';
 import uuid from 'uuid/v1';
+import { verify } from 'crypto';
 
 
 const editArticle = {
@@ -9,6 +10,26 @@ const editArticle = {
         let { userId } = req.user;
 
         // verify that article is edited by its author
+
+        verifyUserQuery = `SELECT * FROM teamwork.articles WHERE articleid = $1 and authorid=$2`;
+        verifyUserValues = [
+            req.params.articleId,
+            userId
+        ]
+        try {
+            const { rows } = await pool.query(verifyUserQuery, verifyUserValues)
+            if (!rows[0]) {
+                return res.status(401).send({
+                    status: `error`,
+                    message: `you are not allowed to edit this article`
+                })
+            }
+        } catch (err) {
+            return res.status(400).send({
+                status: `error`,
+                message: `could not verify article`
+            })
+        }
 
         let { title, content, tag } = req.body;
 
@@ -36,7 +57,7 @@ const editArticle = {
             tag
         })
 
-        if(validate.error){
+        if (validate.error) {
             return res.status(400).send({
                 status: `error`,
                 message: validate.error.details[0].message
@@ -46,7 +67,7 @@ const editArticle = {
         content = content.trim();
         tag = tag.trim();
 
-        const query = `UPDATE teamwork.articles SET title=$1, content=$2, tag=$3 WHERE articleid = $4returning *`;
+        const query = `UPDATE teamwork.articles SET title=$1, content=$2, tag=$3 WHERE articleid = $4 returning *`;
         const values = [
             title,
             content,
@@ -56,7 +77,7 @@ const editArticle = {
 
         try {
             const { rows } = await pool.query(query, values);
-            if(!rows[0]){
+            if (!rows[0]) {
                 return res.status(500).send({
                     status: `error`,
                     message: 'error posting article'
