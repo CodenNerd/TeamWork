@@ -75,7 +75,7 @@ const editArticle = {
             if (!rows[0]) {
                 return res.status(500).send({
                     status: `error`,
-                    message: 'error updating article'
+                    message: 'article not found'
                 });
             }
             return res.status(201).send({

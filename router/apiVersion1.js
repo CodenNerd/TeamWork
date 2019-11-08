@@ -7,6 +7,7 @@ import shareGif from '../Controllers/shareGif';
 import createArticle from '../Controllers/createArticle';
 import shareArticle from '../Controllers/shareArticle';
 import editArticle from '../Controllers/editArticle';
+import deleteArticle from '../Controllers/deleteArticle';
 
 const api = Router();
 
@@ -18,5 +19,7 @@ api.post('/auth/articles', Auth, createArticle);
 api.post('/auth/articles/:articleId/share/:recipientId', Auth, shareArticle);
 
 api.put('/auth/articles/:articleId', Auth, editArticle);
+
+api.delete('/auth/articles/:articleId', Auth, deleteArticle);
 
 export default api;
