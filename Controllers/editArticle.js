@@ -3,10 +3,13 @@ import schema from '../Models/createArticleJoiSchema';
 import uuid from 'uuid/v1';
 
 
-const createArticle = {
-    async newArticle(req, res) {
+const editArticle = {
+    async editArticle(req, res) {
         // if (req.user.userType !== 'employee') return res.status(401).send({ message: 'please create an employee account to perform this task' });
         let { userId } = req.user;
+
+        // verify that article is edited by its author
+
         let { title, content, tag } = req.body;
 
         if (!title) {
@@ -43,14 +46,12 @@ const createArticle = {
         content = content.trim();
         tag = tag.trim();
 
-        const query = `INSERT INTO teamwork.articles(articleid, title, articlebody, tag, articleauthorid, datetime) VALUES($1, $2, $3, $4, $5, $6) returning *`;
+        const query = `UPDATE teamwork.articles SET title=$1, content=$2, tag=$3 WHERE articleid = $4returning *`;
         const values = [
-            uuid(),
             title,
             content,
             tag,
-            userId,
-            new Date(),
+            req.params.articleId,
         ];
 
         try {
@@ -65,7 +66,7 @@ const createArticle = {
                 status: `success`,
                 data: {
                     articleId: rows[0].articleid,
-                    message: 'Article posted successfully',
+                    message: 'Article updated successfully',
                     createdOn: rows[0].datetime,
                     title: rows[0].title,
                     tag: rows[0].tag,
@@ -80,4 +81,4 @@ const createArticle = {
     },
 };
 
-export default createArticle.newArticle;
+export default editArticle.editArticle;

@@ -7,9 +7,8 @@ import shareGif from '../Controllers/shareGif';
 import createArticle from '../Controllers/createArticle';
 import shareArticle from '../Controllers/shareArticle';
 import editArticle from '../Controllers/editArticle';
+
 const api = Router();
-
-
 
 api.post('/auth/create-user', Auth, addUser);
 api.post('/signin', signIn);
