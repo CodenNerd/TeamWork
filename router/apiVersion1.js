@@ -14,6 +14,7 @@ import createGifComment from '../Controllers/createGifComment';
 import getAllPosts from '../Controllers/getAllPosts';
 import getOneArticle from '../Controllers/getOneArticle';
 import getOneGif from '../Controllers/getOneGif';
+import getAllEmployees from '../Controllers/getAllEmployees';
 
 const api = Router();
 
@@ -35,5 +36,7 @@ api.post('/auth/gifs/:gifId/comments', Auth, createGifComment);
 api.get('/auth/feed', Auth, getAllPosts);
 api.get('/auth/articles/:articleId', Auth, getOneArticle);
 api.get('/auth/gifs/:gifId', Auth, getOneGif);
+
+api.get('/auth/employees', Auth, getAllEmployees);
 
 export default api;
