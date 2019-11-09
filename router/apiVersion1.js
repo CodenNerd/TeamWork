@@ -12,6 +12,7 @@ import deleteGif from '../Controllers/deleteGif';
 import createArticleComment from '../Controllers/createArticleComment';
 import createGifComment from '../Controllers/createGifComment';
 import getAllPosts from '../Controllers/getAllPosts';
+import getOneArticle from '../Controllers/getOneArticle';
 
 const api = Router();
 
@@ -31,5 +32,6 @@ api.post('/auth/articles/:articleId/comments', Auth, createArticleComment);
 api.post('/auth/gifs/:gifId/comments', Auth, createGifComment);
 
 api.get('/auth/feed', Auth, getAllPosts);
+api.get('/auth/articles/:articleId', Auth, getOneArticle);
 
 export default api;
