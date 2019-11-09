@@ -11,6 +11,7 @@ import deleteArticle from '../Controllers/deleteArticle';
 import deleteGif from '../Controllers/deleteGif';
 import createArticleComment from '../Controllers/createArticleComment';
 import createGifComment from '../Controllers/createGifComment';
+import getAllPosts from '../Controllers/getAllPosts';
 
 const api = Router();
 
@@ -28,5 +29,7 @@ api.delete('/auth/gifs/:gifId', Auth, deleteGif);
 
 api.post('/auth/articles/:articleId/comments', Auth, createArticleComment);
 api.post('/auth/gifs/:gifId/comments', Auth, createGifComment);
+
+api.get('/auth/feed', Auth, getAllPosts);
 
 export default api;
