@@ -15,6 +15,7 @@ import getAllPosts from '../Controllers/getAllPosts';
 import getOneArticle from '../Controllers/getOneArticle';
 import getOneGif from '../Controllers/getOneGif';
 import getAllEmployees from '../Controllers/getAllEmployees';
+import getOneEmployee from '../Controllers/getOneEmployee';
 
 const api = Router();
 
@@ -38,5 +39,6 @@ api.get('/auth/articles/:articleId', Auth, getOneArticle);
 api.get('/auth/gifs/:gifId', Auth, getOneGif);
 
 api.get('/auth/employees', Auth, getAllEmployees);
+api.get('/auth/employees/:employeeId', Auth, getOneEmployee);
 
 export default api;
