@@ -13,7 +13,7 @@ const likePost = {
                 message: `Wrong postID`
             })
         }
-        if (likedposttype !== 'article' || likedposttype !== 'gif' || likedposttype !== 'comment') {
+        if (likedposttype !== 'article' && likedposttype !== 'gif' && likedposttype !== 'comment') {
             return res.status(400).send({
                 status: `error`,
                 message: `Wrong post type`
@@ -48,7 +48,7 @@ const likePost = {
             new Date()
         ]
         try {
-            const query = `INSERT into teamwork.likes(id, likerid, likedpostid, likedposttype, datetime) VALUES ($1, $2, $3, $4, $5) returning *`;
+            const query = `INSERT into teamwork.likes(likeid, likerid, likedpostid, likedposttype, datetime) VALUES ($1, $2, $3, $4, $5) returning *`;
             const { rows } = await pool.query(query, values);
             if (!rows[0]) {
                 return res.status(500).send({
@@ -58,7 +58,8 @@ const likePost = {
             }
             return res.status(201).send({
                 status: `success`,
-                message: `post liked successfully`
+                message: `post liked successfully`,
+                rows
             })
         }
         catch (err) {
