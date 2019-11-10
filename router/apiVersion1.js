@@ -43,7 +43,7 @@ api.get('/auth/gifs/:gifId', Auth, getOneGif);
 api.get('/auth/employees', Auth, getAllEmployees);
 api.get('/auth/employees/:employeeId', Auth, getOneEmployee);
 
-api.post('/auth/posts/:postId/like', Auth, likePost);
+api.post('/auth/posts/:postId/likes', Auth, likePost);
 
 api.delete('/auth/posts/:postId/likes/:likeId', Auth, deleteLike);
 
