@@ -19,6 +19,25 @@ const likePost = {
                 message: `Wrong post type`
             })
         }
+        const targetTable = likedposttype+'s';
+        const targetIdColumn = likedposttype+'id';
+        const postIDVerificationQuery = `SELECT * from teamwork.${targetTable} WHERE ${targetIdColumn} = $1`;
+        try {
+            const { rows } = await pool.query(postIDVerificationQuery, [req.params.postId])
+            if (!rows[0]) {
+                return res.status(400).send({
+                    status: `error`,
+                    message: `${likedposttype} not found`
+                })
+            }
+        } catch (err) {
+            return res.status(500).send({
+                status: `error`,
+                message: `Oops! Could not verify ${likedposttype}`
+            })
+        }
+
+
         const checkExistingLike = `SELECT * from teamwork.likes WHERE likedpostid = $1 AND likerid=$2 AND likedposttype=$3`;
         const checkValues = [
             req.params.postId,
