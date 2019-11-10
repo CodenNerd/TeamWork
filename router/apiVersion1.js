@@ -16,6 +16,7 @@ import getOneArticle from '../Controllers/getOneArticle';
 import getOneGif from '../Controllers/getOneGif';
 import getAllEmployees from '../Controllers/getAllEmployees';
 import getOneEmployee from '../Controllers/getOneEmployee';
+import likePost from '../Controllers/likePost';
 
 const api = Router();
 
@@ -40,5 +41,7 @@ api.get('/auth/gifs/:gifId', Auth, getOneGif);
 
 api.get('/auth/employees', Auth, getAllEmployees);
 api.get('/auth/employees/:employeeId', Auth, getOneEmployee);
+
+api.post('/auth/posts/:postId/like', Auth, likePost);
 
 export default api;
