@@ -18,6 +18,7 @@ import getAllEmployees from '../Controllers/getAllEmployees';
 import getOneEmployee from '../Controllers/getOneEmployee';
 import likePost from '../Controllers/likePost';
 import deleteLike from '../Controllers/deleteLike';
+import getLikes from '../Controllers/getLikes';
 
 const api = Router();
 
@@ -44,7 +45,7 @@ api.get('/auth/employees', Auth, getAllEmployees);
 api.get('/auth/employees/:employeeId', Auth, getOneEmployee);
 
 api.post('/auth/posts/:postId/likes', Auth, likePost);
-
 api.delete('/auth/posts/:postId/likes/:likeId', Auth, deleteLike);
+api.get('/auth/posts/:postId/likes', Auth, getLikes)
 
 export default api;
