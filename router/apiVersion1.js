@@ -23,6 +23,7 @@ import deleteComment from '../Controllers/deleteComment';
 import getTagArticle from '../Controllers/getTagArticle';
 import flagPost from '../Controllers/flagPost';
 import getFlaggedPosts from '../Controllers/getFlaggedPosts';
+import updateFlaggedPost from '../Controllers/updateFlaggedPost';
 
 const api = Router();
 
@@ -59,5 +60,6 @@ api.get('/auth/articles/tags/:tag', Auth, getTagArticle);
 
 api.post('/auth/posts/:postId/flag', Auth, flagPost);
 api.get('/auth/posts/flags', Auth, getFlaggedPosts);
+api.put('/auth/post/:postId/flags/:flagId', Auth, updateFlaggedPost);
 
 export default api;
