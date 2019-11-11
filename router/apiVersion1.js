@@ -60,6 +60,7 @@ api.get('/auth/articles/tags/:tag', Auth, getTagArticle);
 
 api.post('/auth/posts/:postId/flag', Auth, flagPost);
 api.get('/auth/posts/flags', Auth, getFlaggedPosts);
-api.patch('/auth/posts/:postId/flags/:flagId', Auth, updateFlaggedPost);
+api.patch('/auth/posts/flags/:flagId', Auth, updateFlaggedPost);
+api.delete('/auth/posts/flags/:flagId')
 
 export default api;
