@@ -1,0 +1,19 @@
+import vision from '@google-cloud/vision';
+
+const ScreenImage = {
+    async screen(req, res) {
+
+        // Creates a client
+        const client = new vision.ImageAnnotatorClient();
+
+        // Performs label detection on the image file
+        const result = await client.safeSearchDetection('https://res.cloudinary.com/codennerd/image/upload/v1573105117/rzmkzcocnzr89pmqcxer.png');
+
+       return res.status(200).send({
+           result
+       });
+
+    }
+}
+
+export default ScreenImage.screen;
