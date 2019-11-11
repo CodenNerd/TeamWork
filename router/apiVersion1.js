@@ -25,6 +25,7 @@ import flagPost from '../Controllers/flagPost';
 import getFlaggedPosts from '../Controllers/getFlaggedPosts';
 import updateFlaggedPost from '../Controllers/updateFlaggedPost';
 import deleteFlaggedPost from '../Controllers/deleteFlaggedPost';
+import searchForPosts from '../Controllers/searchForPosts';
 
 const api = Router();
 
@@ -63,5 +64,7 @@ api.post('/auth/posts/:postId/flag', Auth, flagPost);
 api.get('/auth/posts/flags', Auth, getFlaggedPosts);
 api.patch('/auth/posts/flags/:flagId', Auth, updateFlaggedPost);
 api.delete('/auth/posts/flags/:flagId', Auth, deleteFlaggedPost)
+
+api.post('/auth/posts/search', Auth, searchForPosts);
 
 export default api;
