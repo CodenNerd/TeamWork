@@ -18,11 +18,13 @@ import getAllEmployees from '../Controllers/getAllEmployees';
 import getOneEmployee from '../Controllers/getOneEmployee';
 import likePost from '../Controllers/likePost';
 import deleteLike from '../Controllers/deleteLike';
-
 import getLikes from '../Controllers/getLikes';
 import deleteComment from '../Controllers/deleteComment';
 import getTagArticle from '../Controllers/getTagArticle';
 import flagPost from '../Controllers/flagPost';
+import getFlaggedPosts from '../Controllers/getFlaggedPosts';
+import updateFlaggedPost from '../Controllers/updateFlaggedPost';
+import deleteFlaggedPost from '../Controllers/deleteFlaggedPost';
 
 const api = Router();
 
@@ -33,7 +35,7 @@ api.post('/auth/gifs/:gifId/share/:recipientId', Auth, shareGif);
 api.post('/auth/articles', Auth, createArticle);
 api.post('/auth/articles/:articleId/share/:recipientId', Auth, shareArticle);
 
-api.put('/auth/articles/:articleId', Auth, editArticle);
+api.patch('/auth/articles/:articleId', Auth, editArticle);
 
 api.delete('/auth/articles/:articleId', Auth, deleteArticle);
 api.delete('/auth/gifs/:gifId', Auth, deleteGif);
@@ -57,6 +59,9 @@ api.delete('/auth/posts/:postId/comments/:commentId', Auth, deleteComment);
 
 api.get('/auth/articles/tags/:tag', Auth, getTagArticle);
 
-api.post('/auth/posts/:postId/flag', Auth, flagPost)
+api.post('/auth/posts/:postId/flag', Auth, flagPost);
+api.get('/auth/posts/flags', Auth, getFlaggedPosts);
+api.patch('/auth/posts/flags/:flagId', Auth, updateFlaggedPost);
+api.delete('/auth/posts/flags/:flagId', Auth, deleteFlaggedPost)
 
 export default api;
