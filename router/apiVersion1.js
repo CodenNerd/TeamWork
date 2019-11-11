@@ -54,7 +54,7 @@ api.get('/auth/posts/:postId/likes', Auth, getLikes)
 
 api.delete('/auth/posts/:postId/comments/:commentId', Auth, deleteComment);
 
-api.get('/auth/articles/:articleId/:tag', Auth, getTagArticle)
+api.get('/auth/articles/:tag', Auth, getTagArticle)
 
 
 export default api;
