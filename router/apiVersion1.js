@@ -24,6 +24,7 @@ import getTagArticle from '../Controllers/getTagArticle';
 import flagPost from '../Controllers/flagPost';
 import getFlaggedPosts from '../Controllers/getFlaggedPosts';
 import updateFlaggedPost from '../Controllers/updateFlaggedPost';
+import deleteFlaggedPost from '../Controllers/deleteFlaggedPost';
 
 const api = Router();
 
@@ -61,6 +62,6 @@ api.get('/auth/articles/tags/:tag', Auth, getTagArticle);
 api.post('/auth/posts/:postId/flag', Auth, flagPost);
 api.get('/auth/posts/flags', Auth, getFlaggedPosts);
 api.patch('/auth/posts/flags/:flagId', Auth, updateFlaggedPost);
-api.delete('/auth/posts/flags/:flagId')
+api.delete('/auth/posts/flags/:flagId', Auth, deleteFlaggedPost)
 
 export default api;
