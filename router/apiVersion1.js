@@ -22,6 +22,7 @@ import deleteLike from '../Controllers/deleteLike';
 import getLikes from '../Controllers/getLikes';
 import deleteComment from '../Controllers/deleteComment';
 import getTagArticle from '../Controllers/getTagArticle';
+import flagPost from '../Controllers/flagPost';
 
 const api = Router();
 
@@ -55,6 +56,6 @@ api.get('/auth/posts/:postId/likes', Auth, getLikes)
 api.delete('/auth/posts/:postId/comments/:commentId', Auth, deleteComment);
 
 api.get('/auth/articles/tags/:tag', Auth, getTagArticle);
-
+api.post('/auth/posts/:postId/flag', Auth, flagPost)
 
 export default api;
