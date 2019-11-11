@@ -45,7 +45,7 @@ const getPost = {
             } catch (error) {
                 return res.status(500).send({
                     status: `error`,
-                    message: `Server error. Could not get comments`
+                    message: `Server error. Could not get likes`
                 })
             }
 
