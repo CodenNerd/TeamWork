@@ -10,7 +10,7 @@ cloudinary.config({
 
 })
 const createGif = {
-    async newGif(req, res) {
+    async newGif(req, res, next) {
         // if (req.user.userType !== 'employee') return res.status(401).send({ message: 'please create an employee account to perform this task' });
         let { userId } = req.user;
         let { title, caption } = req.body;
@@ -60,6 +60,7 @@ const createGif = {
             })
         }
 
+        next();
         const query = `INSERT INTO teamwork.gifs(gifID, imageURL, title, caption, authorID, datetime) VALUES($1, $2, $3, $4, $5, $6) returning *`;
         const values = [
             uuid(),
