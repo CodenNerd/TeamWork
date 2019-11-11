@@ -25,11 +25,30 @@ const getPost = {
 
 
             } catch (error) {
-                res.status(500).send({
+                return res.status(500).send({
                     status: `error`,
                     message: `Server error. Could not get comments`
                 })
             }
+
+            let postLikes;
+            try {
+                const likeQuery = `SELECT * FROM teamwork.likes WHERE likedpostid=$1 AND likedposttype='article'`;
+                const { rows } = await pool.query(likeQuery, [req.params.articleId]);
+                if (rows[0]) {
+                    postLikes = rows
+                }else{
+                    postLikes = []
+                }
+
+
+            } catch (error) {
+                return res.status(500).send({
+                    status: `error`,
+                    message: `Server error. Could not get likes`
+                })
+            }
+
             return res.status(200).send({
                 status: `success`,
                 data: {
@@ -37,7 +56,8 @@ const getPost = {
                     createdOn: rows[0].datetime,
                     title: rows[0].title,
                     article: rows[0].articlebody,
-                    comments
+                    comments,
+                    likes:postLikes
                     }
                 })
         } catch (error) {
