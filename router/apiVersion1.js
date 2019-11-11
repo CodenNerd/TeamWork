@@ -34,7 +34,7 @@ api.post('/auth/gifs/:gifId/share/:recipientId', Auth, shareGif);
 api.post('/auth/articles', Auth, createArticle);
 api.post('/auth/articles/:articleId/share/:recipientId', Auth, shareArticle);
 
-api.put('/auth/articles/:articleId', Auth, editArticle);
+api.patch('/auth/articles/:articleId', Auth, editArticle);
 
 api.delete('/auth/articles/:articleId', Auth, deleteArticle);
 api.delete('/auth/gifs/:gifId', Auth, deleteGif);
@@ -60,6 +60,6 @@ api.get('/auth/articles/tags/:tag', Auth, getTagArticle);
 
 api.post('/auth/posts/:postId/flag', Auth, flagPost);
 api.get('/auth/posts/flags', Auth, getFlaggedPosts);
-api.put('/auth/post/:postId/flags/:flagId', Auth, updateFlaggedPost);
+api.patch('/auth/post/:postId/flags/:flagId', Auth, updateFlaggedPost);
 
 export default api;
