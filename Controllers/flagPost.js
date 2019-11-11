@@ -2,8 +2,8 @@ import pool from '../Models/queries';
 import uuid from 'uuid/v1';
 import Helper from './Helper'
 
-const likePost = {
-    async like(req, res) {
+const flagPost = {
+    async flag(req, res) {
         // if (req.user.userType !== 'employee') return res.status(401).send({ message: 'please create an employee account to perform this task' });
         let { userId } = req.user;
         let { flaggedposttype } = req.body
@@ -91,4 +91,4 @@ const likePost = {
     }
 };
 
-export default likePost.like;
+export default flagPost.flag;
