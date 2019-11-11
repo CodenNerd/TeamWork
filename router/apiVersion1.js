@@ -21,7 +21,7 @@ import deleteLike from '../Controllers/deleteLike';
 
 import getLikes from '../Controllers/getLikes';
 import deleteComment from '../Controllers/deleteComment';
-
+import getTagArticle from '../Controllers/getTagArticle';
 
 const api = Router();
 
@@ -53,6 +53,8 @@ api.delete('/auth/posts/:postId/likes/:likeId', Auth, deleteLike);
 api.get('/auth/posts/:postId/likes', Auth, getLikes)
 
 api.delete('/auth/posts/:postId/comments/:commentId', Auth, deleteComment);
+
+api.get('/auth/articles/tags/:tag', Auth, getTagArticle);
 
 
 export default api;
