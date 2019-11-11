@@ -26,12 +26,13 @@ import getFlaggedPosts from '../Controllers/getFlaggedPosts';
 import updateFlaggedPost from '../Controllers/updateFlaggedPost';
 import deleteFlaggedPost from '../Controllers/deleteFlaggedPost';
 import searchForPosts from '../Controllers/searchForPosts';
+import ScreenObscenity from '../Middleware/ScreenObscenity'
 
 const api = Router();
 
 api.post('/auth/create-user', Auth, addUser);
 api.post('/signin', signIn);
-api.post('/auth/gifs', Auth, createGif);
+api.post('/auth/gifs', Auth, createGif, ScreenObscenity);
 api.post('/auth/gifs/:gifId/share/:recipientId', Auth, shareGif);
 api.post('/auth/articles', Auth, createArticle);
 api.post('/auth/articles/:articleId/share/:recipientId', Auth, shareArticle);
