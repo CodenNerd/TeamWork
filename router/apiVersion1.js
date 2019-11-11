@@ -18,7 +18,6 @@ import getAllEmployees from '../Controllers/getAllEmployees';
 import getOneEmployee from '../Controllers/getOneEmployee';
 import likePost from '../Controllers/likePost';
 import deleteLike from '../Controllers/deleteLike';
-
 import getLikes from '../Controllers/getLikes';
 import deleteComment from '../Controllers/deleteComment';
 import getTagArticle from '../Controllers/getTagArticle';
@@ -60,4 +59,5 @@ api.get('/auth/articles/tags/:tag', Auth, getTagArticle);
 
 api.post('/auth/posts/:postId/flag', Auth, flagPost);
 api.get('/auth/posts/flags', Auth, getFlaggedPosts);
+
 export default api;
