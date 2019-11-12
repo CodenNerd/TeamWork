@@ -10,7 +10,7 @@ cloudinary.config({
 
 })
 const createGif = {
-    async newGif(req, res) {
+    async newGif(req, res, next) {
         // if (req.user.userType !== 'employee') return res.status(401).send({ message: 'please create an employee account to perform this task' });
         let { userId } = req.user;
         let { title, caption } = req.body;
@@ -72,7 +72,13 @@ const createGif = {
 
         try {
             const { rows } = await pool.query(query, values);
-            return res.status(201).send({
+            if(!rows[0]){
+                return res.status(500).send({
+                    status: `error`,
+                    message: 'Sorry, error uploading gif'
+                });
+            }
+            req.response = {
                 status: `success`,
                 data: {
                     gifId: rows[0].gifid,
@@ -80,8 +86,9 @@ const createGif = {
                     createdOn: rows[0].datetime,
                     title: rows[0].title,
                     imageURL: rows[0].imageurl
-                },
-            });
+                }
+            };
+            next();
         } catch (error) {
             return res.status(500).send({
                 status: `error`,
