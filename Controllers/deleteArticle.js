@@ -26,16 +26,59 @@ const deleteArticle = {
             })
         }
 
-        
 
-        const query = `DELETE FROM teamwork.articles WHERE articleid=$1`;
-        const values = [
-            req.params.articleId,
-        ];
+
+
 
         try {
+            const query = `DELETE FROM teamwork.articles WHERE articleid=$1`;
+            const values = [
+                req.params.articleId,
+            ];
             const { rows } = await pool.query(query, values);
-        
+
+            return res.status(201).send({
+                status: `success`,
+                data: {
+                    message: 'Article successfully deleted',
+                },
+            });
+        } catch (error) {
+            return res.status(500).send({
+                status: `error`,
+                message: 'Sorry, our server is down.'
+            });
+        }
+
+        try {
+            const query = `DELETE FROM teamwork.comments WHERE commentpostid=$1 AND commentposttype=$2`;
+            const values = [
+                req.params.articleId,
+                'article'
+            ];
+            const { rows } = await pool.query(query, values);
+
+            return res.status(201).send({
+                status: `success`,
+                data: {
+                    message: 'Article successfully deleted',
+                },
+            });
+        } catch (error) {
+            return res.status(500).send({
+                status: `error`,
+                message: 'Sorry, our server is down.'
+            });
+        }
+
+        try {
+            const query = `DELETE FROM teamwork.likes WHERE likedpostid=$1 AND likedposttype=$2`;
+            const values = [
+                req.params.articleId,
+                'article'
+            ];
+            const { rows } = await pool.query(query, values);
+
             return res.status(201).send({
                 status: `success`,
                 data: {
