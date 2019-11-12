@@ -78,14 +78,14 @@ const deletegif = {
             ];
             const { rows } = await pool.query(query, values);
 
-            response.deleteComments = {
+            response.deleteLikes = {
                 status: `success`,
                 data: {
                     message: 'gif likes successfully deleted',
                 },
             };
         } catch (error) {
-            response.deleteComments = {
+            response.deleteLikes = {
                 status: `error`,
                 data: {
                     message: 'gif likes delete error',

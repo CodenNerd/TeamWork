@@ -79,14 +79,14 @@ const deleteArticle = {
             ];
             const { rows } = await pool.query(query, values);
 
-            response.deleteComments = {
+            response.deleteLikes = {
                 status: `success`,
                 data: {
                     message: 'Article likes successfully deleted',
                 },
             };
         } catch (error) {
-            response.deleteComments = {
+            response.deleteLikes = {
                 status: `error`,
                 data: {
                     message: 'Article likes delete error',
