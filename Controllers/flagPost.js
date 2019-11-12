@@ -6,7 +6,8 @@ const flagPost = {
     async flag(req, res) {
         // if (req.user.userType !== 'employee') return res.status(401).send({ message: 'please create an employee account to perform this task' });
         let { userId } = req.user;
-        let { flaggedposttype } = req.body
+        let { flaggedposttype } = req.body;
+        let dateTime;
         if (!Helper.isValidUUID(req.params.postId)) {
             return res.status(400).send({
                 status: `error`,
@@ -30,6 +31,7 @@ const flagPost = {
                     message: `${flaggedposttype} not found`
                 })
             }
+            dateTime = rows[0].datetime;
         } catch (err) {
             return res.status(500).send({
                 status: `error`,
@@ -64,10 +66,10 @@ const flagPost = {
             req.params.postId,
             flaggedposttype,
             'pending',
-            new Date()
+            dateTime
         ]
         try {
-            const query = `INSERT into teamwork.flags(flagid, complainerid, flaggedpostid, flaggedposttype, flagstatus, datetime) VALUES ($1, $2, $3, $4, $5, $6) returning *`;
+            const query = `INSERT into teamwork.flags(flagid, complainerid, flaggedpostid, flaggedposttype, flagstatus, postdatetime) VALUES ($1, $2, $3, $4, $5, $6) returning *`;
             const { rows } = await pool.query(query, values);
             if (!rows[0]) {
                 return res.status(500).send({
