@@ -4,7 +4,7 @@ const deletegif = {
     async deletegif(req, res) {
         // if (req.user.userType !== 'employee') return res.status(401).send({ message: 'please create an employee account to perform this task' });
         let { userId } = req.user;
-        let response;
+        let response = {};
         const verifyUserQuery = `SELECT * FROM teamwork.gifs WHERE gifid = $1 and authorid=$2`;
         const verifyUserValues = [
             req.params.gifId,
@@ -32,7 +32,7 @@ const deletegif = {
             req.params.gifId,
         ];
 
-        try {
+       // try {
             const { rows } = await pool.query(query, values);
             response.deleteGif = {
                 status: `success`,
@@ -41,12 +41,12 @@ const deletegif = {
                 },
             };
             
-        } catch (error) {
-            return res.status(500).send({
-                status: `error`,
-                message: 'Sorry, our server is down.'
-            });
-        }
+        // } catch (error) {
+        //     return res.status(500).send({
+        //         status: `error`,
+        //         message: 'Sorry, our server is down.'
+        //     });
+        // }
         try {
             const query = `DELETE FROM teamwork.comments WHERE commentpostid=$1 AND commentposttype=$2`;
             const values = [

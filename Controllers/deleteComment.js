@@ -5,7 +5,7 @@ const deleteLike = {
         let query;
         let values;        
         let { userId } = req.user;
-        let response;
+        let response = {};
 
         if (req.user.userType === 'employee') {
             query = `DELETE FROM teamwork.comments WHERE commentid = $1 AND commentauthorid=$2`;
