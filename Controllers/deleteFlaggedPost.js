@@ -4,7 +4,7 @@ import Helper from './Helper';
 const deleteFlag = {
     async delete(req, res) {
         // if (req.user.userType !== 'admin') return res.status(401).send({ message: `You're not allowed to perform this task`});
-
+        let response ={};
         if (!Helper.isValidUUID(req.params.flagId)) {
             return res.status(400).send({
                 status: `error`,
@@ -32,16 +32,16 @@ const deleteFlag = {
 
                 const { rows } = await pool.query(deleteQuery, [flaggedPostID]);
 
-                return res.status(201).send({
+                response.deletePost = {
                     status: `success`,
                     message: `flagged post deleted successfully`,
                     rows
-                })
+                }
             } catch (error) {
                 return res.status(500).send({
                     status: `error`,
                     message: `Oops! Could not delete post`,
-                    err
+
                 })
             }
         }
@@ -49,9 +49,36 @@ const deleteFlag = {
             return res.status(500).send({
                 status: `error`,
                 message: `Oops! Could not check flag`,
-                err
+                
             })
         }
+
+        try {
+            const query = `DELETE FROM teamwork.likes WHERE likedpostid=$1 AND likedposttype=$2`;
+            const values = [
+                req.params.gifId,
+                flaggedposttype
+            ];
+            const { rows } = await pool.query(query, values);
+
+            response.deleteLikes = {
+                status: `success`,
+                data: {
+                    message: 'post likes successfully deleted',
+                },
+            };
+        } catch (error) {
+            response.deleteLikes = {
+                status: `error`,
+                data: {
+                    message: 'post likes delete error',
+                },
+            };
+        }
+
+        return res.status(200).send({
+            response
+        })
     }
 };
 
