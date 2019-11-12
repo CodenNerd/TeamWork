@@ -17,5 +17,11 @@ app.use(fileUpload({
 
 
 app.use('/api/v1', apiVersion1);
+app.use((req,res)=>{
+    res.status(404).send({
+        status: `error`,
+        message: `page not found`
+    })
+})
 
 export default app;
