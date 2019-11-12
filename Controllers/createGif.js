@@ -60,35 +60,41 @@ const createGif = {
             })
         }
 
-        next();
-        // const query = `INSERT INTO teamwork.gifs(gifID, imageURL, title, caption, authorID, datetime) VALUES($1, $2, $3, $4, $5, $6) returning *`;
-        // const values = [
-        //     uuid(),
-        //     imageURL,
-        //     title,
-        //     caption,
-        //     userId,
-        //     new Date(),
-        // ];
+        const query = `INSERT INTO teamwork.gifs(gifID, imageURL, title, caption, authorID, datetime) VALUES($1, $2, $3, $4, $5, $6) returning *`;
+        const values = [
+            uuid(),
+            imageURL,
+            title,
+            caption,
+            userId,
+            new Date(),
+        ];
 
-        // try {
-        //     const { rows } = await pool.query(query, values);
-        //     return res.status(201).send({
-        //         status: `success`,
-        //         data: {
-        //             gifId: rows[0].gifid,
-        //             message: 'Gif uploaded successfully',
-        //             createdOn: rows[0].datetime,
-        //             title: rows[0].title,
-        //             imageURL: rows[0].imageurl
-        //         },
-        //     });
-        // } catch (error) {
-        //     return res.status(500).send({
-        //         status: `error`,
-        //         message: 'Sorry, our server is down.'
-        //     });
-        // }
+        try {
+            const { rows } = await pool.query(query, values);
+            if(!rows[0]){
+                return res.status(500).send({
+                    status: `error`,
+                    message: 'Sorry, error uploading gif'
+                });
+            }
+            req.response = {
+                status: `success`,
+                data: {
+                    gifId: rows[0].gifid,
+                    message: 'Gif uploaded successfully',
+                    createdOn: rows[0].datetime,
+                    title: rows[0].title,
+                    imageURL: rows[0].imageurl
+                }
+            };
+            next();
+        } catch (error) {
+            return res.status(500).send({
+                status: `error`,
+                message: 'Sorry, our server is down.'
+            });
+        }
     },
 };
 

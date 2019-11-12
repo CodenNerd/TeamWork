@@ -2,16 +2,20 @@ import vision from '@google-cloud/vision';
 
 const ScreenImage = {
     async screen(req, res) {
+            const prevResponse = req.response;
+            let adult_content;
+        try {
+            const client = new vision.ImageAnnotatorClient();
+            const results = await client.safeSearchDetection(prevResponse.data.imageURL);
+            adult_content = results[0].safeSearchAnnotation.adult;
+        } catch (error) {
+            adult_content = null;
+        }
 
-        // Creates a client
-        const client = new vision.ImageAnnotatorClient();
-
-        // Performs label detection on the image file
-        const result = await client.safeSearchDetection('');
-
-       return res.status(200).send({
-           result
-       });
+        return res.status(200).send({
+            response: prevResponse,
+            adult_content
+        });
 
     }
 }
