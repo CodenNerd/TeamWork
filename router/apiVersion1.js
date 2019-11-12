@@ -54,7 +54,6 @@ api.get('/auth/employees/:employeeId', Auth, getOneEmployee);
 
 api.post('/auth/posts/:postId/likes', Auth, likePost);
 api.delete('/auth/posts/:postId/likes/:likeId', Auth, deleteLike);
-
 api.get('/auth/posts/:postId/likes', Auth, getLikes)
 
 api.delete('/auth/posts/:postId/comments/:commentId', Auth, deleteComment);
