@@ -4,6 +4,7 @@ import schema from '../Models/joiSchema';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
 import dotenv from 'dotenv';
+import Helper from './Helper';
 
 dotenv.config();
 
@@ -56,6 +57,7 @@ const addUser = (req, res) => {
         .then(result => {
             if (result.rowCount) {
                 return res.status(400).send({
+                    status:`error`,
                     message: `A user with email: ${email} already exists`,
                 })
             }
@@ -85,11 +87,7 @@ const addUser = (req, res) => {
                                     status: "success",
                                     data: {
                                         message: "User account successfully created",
-                                        token: jwt.sign({
-                                            userId: rows[0].id
-                                        }, process.env.SECRET, { expiresIn: '7d' }),
-                                        userId: params[0],
-                                        params
+                                        token: Helper.generateToken(rows[0].id),
                                     }
                                 })
 
@@ -98,8 +96,7 @@ const addUser = (req, res) => {
                             .catch(e => {
                                 console.error(e);
                                 return res.status(500).send({
-                                    reqBody: req.body,
-                                    e,
+                                    status: `error`,
                                     message: 'Oops, our server is down'
                                 });
 
@@ -110,8 +107,8 @@ const addUser = (req, res) => {
 
                     }).catch(e => {
                         return res.status(500).send({
+                            status:`error`,
                             message: `could not hash password`,
-                            e
                         })
                     })
             })
@@ -119,9 +116,9 @@ const addUser = (req, res) => {
         })
         .catch(e => {
             return res.status(500).send({
-                e
+                status: `error`,
+                message: `Oops! Our server is down`
             })
-            console.error(e);
         })
 
 }

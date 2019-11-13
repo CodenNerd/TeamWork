@@ -3,7 +3,7 @@ import schema from '../Models/createArticleJoiSchema';
 
 const editArticle = {
     async editArticle(req, res) {
-        // if (req.user.userType !== 'employee') return res.status(401).send({ message: 'please create an employee account to perform this task' });
+        if (req.user.userType !== 'employee') return res.status(401).send({ status: `error`, message: 'please create an employee account to perform this task' });
         let { userId } = req.user;
 
         const verifyUserQuery = `SELECT * FROM teamwork.articles WHERE articleid = $1 and articleauthorid=$2`;

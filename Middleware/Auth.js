@@ -25,7 +25,10 @@ const Auth = {
       req.user = { userId: decoded.userId, userType: rows[0].usertype };
       next();
     } catch (error) {
-      return res.status(400).send(error);
+      return res.status(400).send({
+        status: `error`,
+        message: `Oops! Could not verify token`
+      });
     }
     return res;
   },

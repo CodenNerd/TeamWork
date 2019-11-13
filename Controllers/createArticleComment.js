@@ -6,7 +6,8 @@ import Helper from './Helper';
 
 const createComment = {
     async newComment(req, res) {
-        // if (req.user.userType !== 'employee') return res.status(401).send({ message: 'please create an employee account to perform this task' });
+        if (req.user.userType !== 'employee') return res.status(401).send({ status: `error`, message: 'please create an employee account to perform this task' });
+      
         let { userId } = req.user;
         let { commentBody } = req.body;
         let articleBody;
@@ -73,8 +74,6 @@ const createComment = {
                     message: 'error posting comment'
                 });
             }
-
-
 
             return res.status(201).send({
                 status: `success`,

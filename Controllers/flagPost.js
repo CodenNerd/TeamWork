@@ -4,7 +4,8 @@ import Helper from './Helper'
 
 const flagPost = {
     async flag(req, res) {
-        // if (req.user.userType !== 'employee') return res.status(401).send({ message: 'please create an employee account to perform this task' });
+        if (req.user.userType !== 'employee') return res.status(401).send({ status: `error`, message: 'please create an employee account to perform this task' });
+        
         let { userId } = req.user;
         let { flaggedposttype } = req.body;
         let dateTime;

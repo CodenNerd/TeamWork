@@ -2,7 +2,8 @@ import pool from '../Models/queries';
 
 const deletegif = {
     async deletegif(req, res) {
-        // if (req.user.userType !== 'employee') return res.status(401).send({ message: 'please create an employee account to perform this task' });
+        if (req.user.userType !== 'employee') return res.status(401).send({ status: `error`, message: 'please create an employee account to perform this task' });
+        
         let { userId } = req.user;
         let response = {};
         const verifyUserQuery = `SELECT * FROM teamwork.gifs WHERE gifid = $1 and authorid=$2`;
