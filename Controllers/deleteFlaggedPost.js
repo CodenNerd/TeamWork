@@ -3,7 +3,7 @@ import Helper from './Helper';
 
 const deleteFlag = {
     async delete(req, res) {
-        // if (req.user.userType !== 'admin') return res.status(401).send({ message: `You're not allowed to perform this task`});
+     if (req.user.userType !== 'admin') return res.status(401).send({ status: `error`, message: `You're not allowed to perform this task`});
         let response ={};
         if (!Helper.isValidUUID(req.params.flagId)) {
             return res.status(400).send({

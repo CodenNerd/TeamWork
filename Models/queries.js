@@ -1,10 +1,14 @@
 import { Pool } from 'pg';
+import dotenv from 'dotenv';
+
+dotenv.config();
+
 const pool = new Pool({
-    user: 'postgres',
-    host: 'localhost',
-    database: 'teamwork',
-    password: 'atanda508',
-    port: 5432,
+    user: process.env.USER,
+    host: process.env.HOST,
+    database: process.env.DB,
+    password: process.env.PASSWORD,
+    port: process.env.dbPORT,
 })
 pool.on('connect', () => {
   console.log('connected to db...');

@@ -2,7 +2,7 @@ import pool from '../Models/queries';
 
 const getPosts = {
     async getPosts(req, res) {
-         // if (req.user.userType !== 'employee') return res.status(401).send({ message: 'please create an employee account to perform this task' });
+        if (req.user.userType !== 'employee') return res.status(401).send({ status: `error`, message: 'please create an employee account to perform this task' });
 
         const query = `SELECT articleid as id, datetime as createdOn, title, articlebody as article, null as url, tag, null as caption, articleauthorid as authorid  FROM teamwork.articles 
         UNION 

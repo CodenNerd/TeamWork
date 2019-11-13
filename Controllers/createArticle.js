@@ -5,7 +5,7 @@ import uuid from 'uuid/v1';
 
 const createArticle = {
     async newArticle(req, res) {
-        // if (req.user.userType !== 'employee') return res.status(401).send({ message: 'please create an employee account to perform this task' });
+        if (req.user.userType !== 'employee') return res.status(401).send({ status: `error`, message: 'please create an employee account to perform this task' });
         let { userId } = req.user;
         let { title, content, tag } = req.body;
 
@@ -33,7 +33,7 @@ const createArticle = {
             tag
         })
 
-        if(validate.error){
+        if (validate.error) {
             return res.status(400).send({
                 status: `error`,
                 message: validate.error.details[0].message
@@ -55,7 +55,7 @@ const createArticle = {
 
         try {
             const { rows } = await pool.query(query, values);
-            if(!rows[0]){
+            if (!rows[0]) {
                 return res.status(500).send({
                     status: `error`,
                     message: 'error posting article'

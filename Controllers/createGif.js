@@ -11,7 +11,8 @@ cloudinary.config({
 })
 const createGif = {
     async newGif(req, res, next) {
-        // if (req.user.userType !== 'employee') return res.status(401).send({ message: 'please create an employee account to perform this task' });
+        if (req.user.userType !== 'employee') return res.status(401).send({ status: `error`, message: 'please create an employee account to perform this task' });
+        
         let { userId } = req.user;
         let { title, caption } = req.body;
         if (!req.files || Object.keys(req.files).length === 0) {

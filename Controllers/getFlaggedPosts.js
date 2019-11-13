@@ -2,7 +2,7 @@ import pool from '../Models/queries';
 
 const getFlags = {
     async getFlags(req, res) {
-         // if (req.user.userType !== 'employee') return res.status(401).send({ message: 'please create an employee account to perform this task' });
+        if (req.user.userType !== 'employee') return res.status(401).send({ status: `error`, message: 'please create an employee account to perform this task' });
 
         const query = `SELECT * FROM teamwork.flags WHERE flagstatus='pending'`
         try {

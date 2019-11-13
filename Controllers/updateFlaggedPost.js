@@ -4,7 +4,7 @@ import Helper from './Helper'
 
 const flagPost = {
     async flag(req, res) {
-        // if (req.user.userType !== 'admin') return res.status(401).send({ message: `You're not allowed to perform this task`});
+        if (req.user.userType !== 'admin') return res.status(401).send({ status:`error`, message: `You're not allowed to perform this task`});
         let { flagstatus } = req.body;
 
         if (!Helper.isValidUUID(req.params.flagId)) {

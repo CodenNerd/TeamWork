@@ -4,7 +4,7 @@ import Helper from './Helper'
 
 const shareGif = {
     async share(req, res) {
-        // if (req.user.userType !== 'employee') return res.status(401).send({ message: 'please create an employee account to perform this task' });
+        if (req.user.userType !== 'employee') return res.status(401).send({ status: `error`, message: 'please create an employee account to perform this task' });
         let { userId } = req.user;
 
         if (!Helper.isValidUUID(req.params.gifId) || !Helper.isValidUUID(req.params.recipientId)){

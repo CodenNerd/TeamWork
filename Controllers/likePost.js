@@ -4,7 +4,8 @@ import Helper from './Helper'
 
 const likePost = {
     async like(req, res) {
-        // if (req.user.userType !== 'employee') return res.status(401).send({ message: 'please create an employee account to perform this task' });
+        if (req.user.userType !== 'employee') return res.status(401).send({ status: `error`, message: 'please create an employee account to perform this task' });
+        
         let { userId } = req.user;
         let { likedposttype } = req.body
         if (!Helper.isValidUUID(req.params.postId)) {
