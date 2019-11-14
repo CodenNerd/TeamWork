@@ -39,7 +39,7 @@ const createComment = {
           try {
         const { rows } = await pool.query(selectQuery, selectValues);
         if (!rows[0]) {
-            return res.status(500).send({
+            return res.status(400).send({
                 status: `error`,
                 message: 'gif not found'
             });
@@ -79,7 +79,7 @@ const createComment = {
                     message: 'comment posted successfully',
                     gifTitle,
                     createdOn: rows[0].datetime,
-                    commentBody: rows[0].commentBody  
+                    commentBody: rows[0]  
                 },
             });
         } catch (error) {
