@@ -418,6 +418,68 @@ describe('TeamWork App', () => {
   })
 
 
-  
+  describe('POST share an article', () => {
+    it('should share an article with an employee', (done) => {
+      request(app).post(`/api/v1/articles/${articleId}/share/f9041bb0-06fd-11ea-a416-47fb55786b9a`)
+        .set('x-access-token', employeeToken)
+        .expect('Content-Type', /json/)
+        .expect(201)
+        .end((err, res) => {
+          assert.equal(res.body.status, 'success');
+          expect(res.body).to.have.property('message').to.equal('article shared successfully');
+
+          if (err) return done(err);
+          done();
+
+        })
+    });
+
+
+    it('should not share an article if id params is wrong', (done) => {
+      request(app).post(`/api/v1/articles/${articleId}/share/f9041bb0-06fd-11ea-a416-47fb55786b9`)
+        .set('x-access-token', employeeToken)
+        .expect('Content-Type', /json/)
+        .expect(400)
+        .end((err, res) => {
+          assert.equal(res.body.status, 'error');
+          expect(res.body).to.have.property('message').to.equal('Wrong article ID or recipient ID');
+
+          if (err) return done(err);
+          done();
+
+        })
+    });
+
+    it('should not share an article if article does not exist', (done) => {
+      request(app).post(`/api/v1/articles/f9041bb0-06fd-11ea-a416-47fb55786b9a/share/f9041bb0-06fd-11ea-a416-47fb55786b9a`)
+        .set('x-access-token', employeeToken)
+        .expect('Content-Type', /json/)
+        .expect(400)
+        .end((err, res) => {
+          assert.equal(res.body.status, 'error');
+          expect(res.body).to.have.property('message').to.equal('article not found');
+
+          if (err) return done(err);
+          done();
+
+        })
+    });
+
+    it('should not share an article if recipient does not exist', (done) => {
+      request(app).post(`/api/v1/articles/${articleId}/share/f9041bb0-06fd-11ea-a416-47fb55786b9b`)
+        .set('x-access-token', employeeToken)
+        .expect('Content-Type', /json/)
+        .expect(400)
+        .end((err, res) => {
+          assert.equal(res.body.status, 'error');
+          expect(res.body).to.have.property('message').to.equal('recipient not found');
+
+          if (err) return done(err);
+          done();
+
+        })
+    });
+
+  })
 
 })
