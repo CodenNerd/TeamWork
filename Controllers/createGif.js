@@ -37,17 +37,7 @@ const createGif = {
                 message: `You need to provide a title`
             })
         }
-        let imageURL;
-        await cloudinary.uploader.upload(image.tempFilePath, (err, result) => {
-            if (err) {
-                return res.status(500).send({
-                    status: "error",
-                    message: `Error uploading image`
-                })
-            }
-            imageURL = result.secure_url;
-        })
-
+        
         title = title.trim();
         caption = caption.trim();
 
@@ -62,6 +52,19 @@ const createGif = {
                 message: validate.error.details[0].message
             })
         }
+        
+        let imageURL;
+        await cloudinary.uploader.upload(image.tempFilePath, (err, result) => {
+            if (err) {
+                return res.status(500).send({
+                    status: "error",
+                    message: `Error uploading image`
+                })
+            }
+            imageURL = result.secure_url;
+        })
+
+        
 
         const query = `INSERT INTO teamwork.gifs(gifID, imageURL, title, caption, authorID, datetime) VALUES($1, $2, $3, $4, $5, $6) returning *`;
         const values = [

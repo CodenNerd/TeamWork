@@ -53,7 +53,6 @@ const shareGif = {
             req.params.recipientId,
             new Date()
         ]
-        console.log(values);
         try{
         const query = `INSERT into teamwork.sharedposts(shareid, postid, authorid, recipientID, datetime) VALUES ($1, $2, $3, $4, $5) returning *`;
         const {rows} = await pool.query(query, values);

@@ -17,6 +17,7 @@ describe('TeamWork App', () => {
   let email;
   let password;
   let employeeToken;
+  let gifId;
   describe('POST a new user', () => {
     const initialAuthToken = `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIyNjE4ZjYzMC1mZmJlLTExZTktOGU0NS1lM2UzYThlODFkNDEiLCJpYXQiOjE1NzM2ODAwNTAsImV4cCI6MTU3NDI4NDg1MH0.I8jH0LIybusX17Ck27TAGhkn_oYta3_cVJ-9VqocM9o`
     it('should create a new user', (done) => {
@@ -169,6 +170,7 @@ describe('TeamWork App', () => {
 
 
   describe('POST a new gif', () => {
+    
     it('should create a new gif', (done) => {
 
       request(app).post('/api/v1/gifs')
@@ -184,11 +186,13 @@ describe('TeamWork App', () => {
           expect(res.body).to.have.property('data').and.property('createdOn');
           expect(res.body).to.have.property('data').and.property('title');
           expect(res.body).to.have.property('data').and.property('imageURL');
+          expect(res.body).to.have.property('adult_content');
+
+          gifId = res.body.data.gifId
           if (err) return done(err);
           done();
 
         })
-      done();
     });
 
     it('should not create a new gif if uploaded image is not gif mimetype', (done) => {
@@ -249,10 +253,72 @@ describe('TeamWork App', () => {
 
 
 
+  describe('POST share a gif', () => {
+    it('should share a gif with an employee', (done) => {
+      request(app).post(`/api/v1/gifs/${gifId}/share/f9041bb0-06fd-11ea-a416-47fb55786b9a`)
+        .set('x-access-token', employeeToken)
+        .expect('Content-Type', /json/)
+        .expect(201)
+        .end((err, res) => {
+          assert.equal(res.body.status, 'success');
+          expect(res.body).to.have.property('message').to.equal('GIF shared successfully');
+
+          if (err) return done(err);
+          done();
+
+        })
+    });
+
+
+    it('should not share a gif if id params is wrong', (done) => {
+      request(app).post(`/api/v1/gifs/${gifId}/share/f9041bb0-06fd-11ea-a416-47fb55786b9`)
+        .set('x-access-token', employeeToken)
+        .expect('Content-Type', /json/)
+        .expect(400)
+        .end((err, res) => {
+          assert.equal(res.body.status, 'error');
+          expect(res.body).to.have.property('message').to.equal('Wrong gif ID or recipient ID');
+
+          if (err) return done(err);
+          done();
+
+        })
+    });
+
+    it('should not share a gif if gif does not exist', (done) => {
+      request(app).post(`/api/v1/gifs/f9041bb0-06fd-11ea-a416-47fb55786b9a/share/f9041bb0-06fd-11ea-a416-47fb55786b9a`)
+        .set('x-access-token', employeeToken)
+        .expect('Content-Type', /json/)
+        .expect(400)
+        .end((err, res) => {
+          assert.equal(res.body.status, 'error');
+          expect(res.body).to.have.property('message').to.equal('gif not found');
+
+          if (err) return done(err);
+          done();
+
+        })
+    });
+
+    it('should not share a gif if recipient does not exist', (done) => {
+      request(app).post(`/api/v1/gifs/${gifId}/share/f9041bb0-06fd-11ea-a416-47fb55786b9b`)
+        .set('x-access-token', employeeToken)
+        .expect('Content-Type', /json/)
+        .expect(400)
+        .end((err, res) => {
+          assert.equal(res.body.status, 'error');
+          expect(res.body).to.have.property('message').to.equal('recipient not found');
+
+          if (err) return done(err);
+          done();
+
+        })
+    });
+    
+  })
 
 
 
-  
 
 
 
