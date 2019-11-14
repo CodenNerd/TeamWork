@@ -20,7 +20,7 @@ const editArticle = {
                 })
             }
         } catch (err) {
-            return res.status(400).send({
+            return res.status(500).send({
                 status: `error`,
                 message: `could not verify article`
             })
@@ -75,7 +75,7 @@ const editArticle = {
             if (!rows[0]) {
                 return res.status(500).send({
                     status: `error`,
-                    message: 'article not found'
+                    message: 'article could not be updated'
                 });
             }
             return res.status(201).send({

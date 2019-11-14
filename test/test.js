@@ -13,14 +13,15 @@ describe('TeamWork App', () => {
           done();
         })
     });
-  })
+  })    
+  
+  const initialAuthToken = `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIyNjE4ZjYzMC1mZmJlLTExZTktOGU0NS1lM2UzYThlODFkNDEiLCJpYXQiOjE1NzM2ODAwNTAsImV4cCI6MTU3NDI4NDg1MH0.I8jH0LIybusX17Ck27TAGhkn_oYta3_cVJ-9VqocM9o`
   let email;
   let password;
   let employeeToken;
   let gifId;
   let articleId;
   describe('POST a new user', () => {
-    const initialAuthToken = `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIyNjE4ZjYzMC1mZmJlLTExZTktOGU0NS1lM2UzYThlODFkNDEiLCJpYXQiOjE1NzM2ODAwNTAsImV4cCI6MTU3NDI4NDg1MH0.I8jH0LIybusX17Ck27TAGhkn_oYta3_cVJ-9VqocM9o`
     it('should create a new user', (done) => {
       const user = {
         firstName: 'AbdulAzeez',
@@ -170,153 +171,153 @@ describe('TeamWork App', () => {
 
 
 
-  describe('POST a new gif', () => {
+  // describe('POST a new gif', () => {
 
-    it('should create a new gif', (done) => {
+  //   it('should create a new gif', (done) => {
 
-      request(app).post('/api/v1/gifs')
-        .set('x-access-token', employeeToken)
-        .field({ title: 'heydd', caption: 'oh yeah yes' })
-        .attach('image', './test/testpic1.gif')
-        .expect('Content-Type', /json/)
-        .expect(201)
-        .end((err, res) => {
-          assert.equal(res.body.status, 'success');
-          expect(res.body).to.have.property('data').and.property('message').to.equal('Gif uploaded successfully');
-          expect(res.body).to.have.property('data').and.property('gifId');
-          expect(res.body).to.have.property('data').and.property('createdOn');
-          expect(res.body).to.have.property('data').and.property('title');
-          expect(res.body).to.have.property('data').and.property('imageURL');
-          expect(res.body).to.have.property('adult_content');
+  //     request(app).post('/api/v1/gifs')
+  //       .set('x-access-token', employeeToken)
+  //       .field({ title: 'heydd', caption: 'oh yeah yes' })
+  //       .attach('image', './test/testpic1.gif')
+  //       .expect('Content-Type', /json/)
+  //       .expect(201)
+  //       .end((err, res) => {
+  //         assert.equal(res.body.status, 'success');
+  //         expect(res.body).to.have.property('data').and.property('message').to.equal('Gif uploaded successfully');
+  //         expect(res.body).to.have.property('data').and.property('gifId');
+  //         expect(res.body).to.have.property('data').and.property('createdOn');
+  //         expect(res.body).to.have.property('data').and.property('title');
+  //         expect(res.body).to.have.property('data').and.property('imageURL');
+  //         expect(res.body).to.have.property('adult_content');
 
-          gifId = res.body.data.gifId
-          if (err) return done(err);
-          done();
+  //         gifId = res.body.data.gifId
+  //         if (err) return done(err);
+  //         done();
 
-        })
-    });
+  //       })
+  //   });
 
-    it('should not create a new gif if uploaded image is not gif mimetype', (done) => {
+  //   it('should not create a new gif if uploaded image is not gif mimetype', (done) => {
 
-      request(app).post('/api/v1/gifs')
-        .set('x-access-token', employeeToken)
-        .field({ title: 'hey', caption: 'oh yeah yes' })
-        .attach('image', './test/testpic2.jpg')
-        .expect('Content-Type', /json/)
-        .expect(400)
-        .end((err, res) => {
-          assert.equal(res.body.status, 'error');
-          expect(res.body).to.have.property('message').to.equal('Selected image must be GIF');
+  //     request(app).post('/api/v1/gifs')
+  //       .set('x-access-token', employeeToken)
+  //       .field({ title: 'hey', caption: 'oh yeah yes' })
+  //       .attach('image', './test/testpic2.jpg')
+  //       .expect('Content-Type', /json/)
+  //       .expect(400)
+  //       .end((err, res) => {
+  //         assert.equal(res.body.status, 'error');
+  //         expect(res.body).to.have.property('message').to.equal('Selected image must be GIF');
 
-          if (err) return done(err);
-          done();
+  //         if (err) return done(err);
+  //         done();
 
-        })
-    });
+  //       })
+  //   });
 
-    it('should not create a new gif if title is not provided', (done) => {
+  //   it('should not create a new gif if title is not provided', (done) => {
 
-      request(app).post('/api/v1/gifs')
-        .set('x-access-token', employeeToken)
-        .field({ caption: 'oh yeah yes' })
-        .attach('image', './test/testpic1.gif')
-        .expect('Content-Type', /json/)
-        .expect(400)
-        .end((err, res) => {
-          assert.equal(res.body.status, 'error');
-          expect(res.body).to.have.property('message').to.equal('You need to provide a title');
+  //     request(app).post('/api/v1/gifs')
+  //       .set('x-access-token', employeeToken)
+  //       .field({ caption: 'oh yeah yes' })
+  //       .attach('image', './test/testpic1.gif')
+  //       .expect('Content-Type', /json/)
+  //       .expect(400)
+  //       .end((err, res) => {
+  //         assert.equal(res.body.status, 'error');
+  //         expect(res.body).to.have.property('message').to.equal('You need to provide a title');
 
-          if (err) return done(err);
-          done();
+  //         if (err) return done(err);
+  //         done();
 
-        })
-    });
+  //       })
+  //   });
 
-    it('should not create a new gif if gif is not provided', (done) => {
+  //   it('should not create a new gif if gif is not provided', (done) => {
 
-      request(app).post('/api/v1/gifs')
-        .set('x-access-token', employeeToken)
-        .field({ title: `Yess`, caption: 'oh yeah yes' })
-        .attach('image', '')
-        .expect('Content-Type', /json/)
-        .expect(400)
-        .end((err, res) => {
-          assert.equal(res.body.status, 'error');
-          expect(res.body).to.have.property('message').to.equal('No files were uploaded.');
+  //     request(app).post('/api/v1/gifs')
+  //       .set('x-access-token', employeeToken)
+  //       .field({ title: `Yess`, caption: 'oh yeah yes' })
+  //       .attach('image', '')
+  //       .expect('Content-Type', /json/)
+  //       .expect(400)
+  //       .end((err, res) => {
+  //         assert.equal(res.body.status, 'error');
+  //         expect(res.body).to.have.property('message').to.equal('No files were uploaded.');
 
-          if (err) return done(err);
-          done();
+  //         if (err) return done(err);
+  //         done();
 
-        })
-    });
+  //       })
+  //   });
 
-  })
-
-
-
-  describe('POST share a gif', () => {
-    it('should share a gif with an employee', (done) => {
-      request(app).post(`/api/v1/gifs/${gifId}/share/f9041bb0-06fd-11ea-a416-47fb55786b9a`)
-        .set('x-access-token', employeeToken)
-        .expect('Content-Type', /json/)
-        .expect(201)
-        .end((err, res) => {
-          assert.equal(res.body.status, 'success');
-          expect(res.body).to.have.property('message').to.equal('GIF shared successfully');
-
-          if (err) return done(err);
-          done();
-
-        })
-    });
+  // })
 
 
-    it('should not share a gif if id params is wrong', (done) => {
-      request(app).post(`/api/v1/gifs/${gifId}/share/f9041bb0-06fd-11ea-a416-47fb55786b9`)
-        .set('x-access-token', employeeToken)
-        .expect('Content-Type', /json/)
-        .expect(400)
-        .end((err, res) => {
-          assert.equal(res.body.status, 'error');
-          expect(res.body).to.have.property('message').to.equal('Wrong gif ID or recipient ID');
 
-          if (err) return done(err);
-          done();
+  // describe('POST share a gif', () => {
+  //   it('should share a gif with an employee', (done) => {
+  //     request(app).post(`/api/v1/gifs/${gifId}/share/f9041bb0-06fd-11ea-a416-47fb55786b9a`)
+  //       .set('x-access-token', employeeToken)
+  //       .expect('Content-Type', /json/)
+  //       .expect(201)
+  //       .end((err, res) => {
+  //         assert.equal(res.body.status, 'success');
+  //         expect(res.body).to.have.property('message').to.equal('GIF shared successfully');
 
-        })
-    });
+  //         if (err) return done(err);
+  //         done();
 
-    it('should not share a gif if gif does not exist', (done) => {
-      request(app).post(`/api/v1/gifs/f9041bb0-06fd-11ea-a416-47fb55786b9a/share/f9041bb0-06fd-11ea-a416-47fb55786b9a`)
-        .set('x-access-token', employeeToken)
-        .expect('Content-Type', /json/)
-        .expect(400)
-        .end((err, res) => {
-          assert.equal(res.body.status, 'error');
-          expect(res.body).to.have.property('message').to.equal('gif not found');
+  //       })
+  //   });
 
-          if (err) return done(err);
-          done();
 
-        })
-    });
+  //   it('should not share a gif if id params is wrong', (done) => {
+  //     request(app).post(`/api/v1/gifs/${gifId}/share/f9041bb0-06fd-11ea-a416-47fb55786b9`)
+  //       .set('x-access-token', employeeToken)
+  //       .expect('Content-Type', /json/)
+  //       .expect(400)
+  //       .end((err, res) => {
+  //         assert.equal(res.body.status, 'error');
+  //         expect(res.body).to.have.property('message').to.equal('Wrong gif ID or recipient ID');
 
-    it('should not share a gif if recipient does not exist', (done) => {
-      request(app).post(`/api/v1/gifs/${gifId}/share/f9041bb0-06fd-11ea-a416-47fb55786b9b`)
-        .set('x-access-token', employeeToken)
-        .expect('Content-Type', /json/)
-        .expect(400)
-        .end((err, res) => {
-          assert.equal(res.body.status, 'error');
-          expect(res.body).to.have.property('message').to.equal('recipient not found');
+  //         if (err) return done(err);
+  //         done();
 
-          if (err) return done(err);
-          done();
+  //       })
+  //   });
 
-        })
-    });
+  //   it('should not share a gif if gif does not exist', (done) => {
+  //     request(app).post(`/api/v1/gifs/f9041bb0-06fd-11ea-a416-47fb55786b9a/share/f9041bb0-06fd-11ea-a416-47fb55786b9a`)
+  //       .set('x-access-token', employeeToken)
+  //       .expect('Content-Type', /json/)
+  //       .expect(400)
+  //       .end((err, res) => {
+  //         assert.equal(res.body.status, 'error');
+  //         expect(res.body).to.have.property('message').to.equal('gif not found');
 
-  })
+  //         if (err) return done(err);
+  //         done();
+
+  //       })
+  //   });
+
+  //   it('should not share a gif if recipient does not exist', (done) => {
+  //     request(app).post(`/api/v1/gifs/${gifId}/share/f9041bb0-06fd-11ea-a416-47fb55786b9b`)
+  //       .set('x-access-token', employeeToken)
+  //       .expect('Content-Type', /json/)
+  //       .expect(400)
+  //       .end((err, res) => {
+  //         assert.equal(res.body.status, 'error');
+  //         expect(res.body).to.have.property('message').to.equal('recipient not found');
+
+  //         if (err) return done(err);
+  //         done();
+
+  //       })
+  //   });
+
+  // })
 
 
 
@@ -480,6 +481,85 @@ describe('TeamWork App', () => {
         })
     });
 
+  })
+
+  describe('PUT edit an article', () => {
+    const article = {
+      title: `Testing edit`,
+      content: `djdd sdkdh`,
+      tag: `tech`
+    }
+    it('should edit an existing article', (done) => {
+      request(app).patch(`/api/v1/articles/${articleId}`)
+        .set('x-access-token', employeeToken)
+        .send(article)
+        .expect('Content-Type', /json/)
+        .expect(201)
+        .end((err, res) => {
+          assert.equal(res.body.status, 'success');
+          expect(res.body).to.have.property('data').and.property('message').to.equal('Article updated successfully');
+          expect(res.body).to.have.property('data').and.property('articleId');
+          expect(res.body).to.have.property('data').and.property('createdOn');
+          expect(res.body).to.have.property('data').and.property('title');
+          expect(res.body).to.have.property('data').and.property('tag');
+
+          
+          if (err) return done(err);
+          done();
+
+        })
+    });
+
+     it('should not edit an existing article if article does not exist', (done) => {
+      request(app).patch(`/api/v1/articles/${gifId}`)
+      .set('x-access-token', employeeToken)
+      .send(article)
+        .expect('Content-Type', /json/)
+        .expect(500)
+        .end((err, res) => {
+          assert.equal(res.body.status, 'error');
+          expect(res.body).to.have.property('message').to.equal('could not verify article');
+
+          if (err) return done(err);
+          done();
+
+        })
+    });
+
+    it('should not edit an existing article if req is not made by an employee', (done) => {
+      request(app).patch(`/api/v1/articles/${articleId}`)
+      .set('x-access-token', initialAuthToken)
+      .send(article)
+        .expect('Content-Type', /json/)
+        .expect(401)
+        .end((err, res) => {
+          assert.equal(res.body.status, 'error');
+          expect(res.body).to.have.property('message').to.equal('please create an employee account to perform this task');
+
+          if (err) return done(err);
+          done();
+
+        })
+    });
+
+
+    it('should not edit an existing article if title is not provided', (done) => {
+      request(app).patch(`/api/v1/articles/${articleId}`)
+      .set('x-access-token', employeeToken)
+      .send({content:`dd ds`, tag: `biz` })
+        .expect('Content-Type', /json/)
+        .expect(400)
+        .end((err, res) => {
+          assert.equal(res.body.status, 'error');
+          expect(res.body).to.have.property('message').to.equal('title must be provided');
+
+          if (err) return done(err);
+          done();
+
+        })
+    });
+
+   
   })
 
 })
