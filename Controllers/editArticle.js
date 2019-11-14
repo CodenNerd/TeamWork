@@ -16,13 +16,13 @@ const editArticle = {
             if (!rows[0]) {
                 return res.status(401).send({
                     status: `error`,
-                    message: `you are not allowed to edit this article`
+                    message: `could not verify article as yours`
                 })
             }
         } catch (err) {
             return res.status(500).send({
                 status: `error`,
-                message: `could not verify article`
+                message: `could not verify article as yours`
             })
         }
 
