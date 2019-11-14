@@ -10,11 +10,11 @@ const signin = {
 
 
     if (!email || !password) {
-      return res.status(400).send({ message: 'Some values are missing' });
+      return res.status(400).send({ status: `error`, message: 'Some values are missing' });
     }
 
     if (!Helper.isValidEmail(req.body.email)) {
-      return res.status(400).send({ message: 'Please enter a valid email address' });
+      return res.status(400).send({ status: `error`, message: 'Please enter a valid email address' });
     }
     email = email.trim();
     password = password.trim();
@@ -25,7 +25,7 @@ const signin = {
         return res.status(400).send({ message: 'Wrong credentials provided' });
       }
       if (!Helper.comparePassword(rows[0].password, req.body.password)) {
-        return res.status(400).send({ message: 'Wrong credentials provided' });
+        return res.status(400).send({ status:`error`, message: 'Wrong credentials provided' });
       }
       const token = await Helper.generateToken(rows[0].id);
       return res.status(202).send({

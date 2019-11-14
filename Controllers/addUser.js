@@ -94,7 +94,6 @@ const addUser = (req, res) => {
 
                             })
                             .catch(e => {
-                                console.error(e);
                                 return res.status(500).send({
                                     status: `error`,
                                     message: 'Oops, our server is down'
