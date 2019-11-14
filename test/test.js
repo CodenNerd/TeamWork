@@ -18,6 +18,7 @@ describe('TeamWork App', () => {
   let password;
   let employeeToken;
   let gifId;
+  let articleId;
   describe('POST a new user', () => {
     const initialAuthToken = `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIyNjE4ZjYzMC1mZmJlLTExZTktOGU0NS1lM2UzYThlODFkNDEiLCJpYXQiOjE1NzM2ODAwNTAsImV4cCI6MTU3NDI4NDg1MH0.I8jH0LIybusX17Ck27TAGhkn_oYta3_cVJ-9VqocM9o`
     it('should create a new user', (done) => {
@@ -170,7 +171,7 @@ describe('TeamWork App', () => {
 
 
   describe('POST a new gif', () => {
-    
+
     it('should create a new gif', (done) => {
 
       request(app).post('/api/v1/gifs')
@@ -206,7 +207,7 @@ describe('TeamWork App', () => {
         .end((err, res) => {
           assert.equal(res.body.status, 'error');
           expect(res.body).to.have.property('message').to.equal('Selected image must be GIF');
-         
+
           if (err) return done(err);
           done();
 
@@ -224,7 +225,7 @@ describe('TeamWork App', () => {
         .end((err, res) => {
           assert.equal(res.body.status, 'error');
           expect(res.body).to.have.property('message').to.equal('You need to provide a title');
-         
+
           if (err) return done(err);
           done();
 
@@ -235,20 +236,20 @@ describe('TeamWork App', () => {
 
       request(app).post('/api/v1/gifs')
         .set('x-access-token', employeeToken)
-        .field({ title:`Yess`, caption: 'oh yeah yes' })
+        .field({ title: `Yess`, caption: 'oh yeah yes' })
         .attach('image', '')
         .expect('Content-Type', /json/)
         .expect(400)
         .end((err, res) => {
           assert.equal(res.body.status, 'error');
           expect(res.body).to.have.property('message').to.equal('No files were uploaded.');
-         
+
           if (err) return done(err);
           done();
 
         })
     });
-    
+
   })
 
 
@@ -314,12 +315,109 @@ describe('TeamWork App', () => {
 
         })
     });
-    
+
   })
 
 
 
+  describe('POST a new article', () => {
+    const article = {
+      title: `Testing`,
+      content: `djdd sdkd`,
+      tag: `tech`
+    }
+    it('should create a new article', (done) => {
+      request(app).post('/api/v1/articles')
+        .set('x-access-token', employeeToken)
+        .send(article)
+        .expect('Content-Type', /json/)
+        .expect(201)
+        .end((err, res) => {
+          assert.equal(res.body.status, 'success');
+          expect(res.body).to.have.property('data').and.property('message').to.equal('Article posted successfully');
+          expect(res.body).to.have.property('data').and.property('articleId');
+          expect(res.body).to.have.property('data').and.property('createdOn');
+          expect(res.body).to.have.property('data').and.property('title');
+          expect(res.body).to.have.property('data').and.property('tag');
+
+          articleId = res.body.data.articleId;
+          if (err) return done(err);
+          done();
+
+        })
+    });
+
+    it('should not create a new article if title is not provided', (done) => {
+
+      request(app).post('/api/v1/articles')
+        .set('x-access-token', employeeToken)
+        .send({content:`dd ds`, tag: `biz` })
+        .expect('Content-Type', /json/)
+        .expect(400)
+        .end((err, res) => {
+          assert.equal(res.body.status, 'error');
+          expect(res.body).to.have.property('message').to.equal('title must be provided');
+
+          if (err) return done(err);
+          done();
+
+        })
+    });
+
+    it('should not create a new article if content is not provided', (done) => {
+
+      request(app).post('/api/v1/articles')
+        .set('x-access-token', employeeToken)
+        .send({title:`dd ds`, tag: `biz` })
+        .expect('Content-Type', /json/)
+        .expect(400)
+        .end((err, res) => {
+          assert.equal(res.body.status, 'error');
+          expect(res.body).to.have.property('message').to.equal('content must be provided');
+
+          if (err) return done(err);
+          done();
+
+        })
+    });
+
+    it('should not create a new article if tag is not provided', (done) => {
+
+      request(app).post('/api/v1/articles')
+        .set('x-access-token', employeeToken)
+        .send({title:`dd ds`, content: `biz` })
+        .expect('Content-Type', /json/)
+        .expect(400)
+        .end((err, res) => {
+          assert.equal(res.body.status, 'error');
+          expect(res.body).to.have.property('message').to.equal('tag must be provided');
+
+          if (err) return done(err);
+          done();
+
+        })
+    });
+
+    it('should not create a new article if title is not valid', (done) => {
+
+      request(app).post('/api/v1/articles')
+        .set('x-access-token', employeeToken)
+        .send({title:`m`, content: `biz`, tag: `ffs` })
+        .expect('Content-Type', /json/)
+        .expect(400)
+        .end((err, res) => {
+          assert.equal(res.body.status, 'error');
+          expect(res.body).to.have.property('message').to.equal('"title" length must be at least 3 characters long');
+
+          if (err) return done(err);
+          done();
+
+        })
+    });
+   
+  })
 
 
+  
 
 })
