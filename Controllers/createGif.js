@@ -16,7 +16,9 @@ const createGif = {
         let { userId } = req.user;
         let { title, caption } = req.body;
         if (!req.files || Object.keys(req.files).length === 0) {
-            return res.status(400).send('No files were uploaded.');
+            return res.status(400).send({
+                status:`error`,
+                message:'No files were uploaded.'});
         }
 
         const { image } = req.files;
@@ -30,7 +32,7 @@ const createGif = {
         if (image.size > 20 * 1024 * 1024) return res.status(400).send({ status: `error`, message: `file size should not exceed 20mb` })
 
         if (!title) {
-            res.status(400).send({
+           return res.status(400).send({
                 status: `error`,
                 message: `You need to provide a title`
             })

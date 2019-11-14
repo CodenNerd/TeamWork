@@ -168,4 +168,92 @@ describe('TeamWork App', () => {
 
 
 
+  describe('POST a new gif', () => {
+    it('should create a new gif', (done) => {
+
+      request(app).post('/api/v1/gifs')
+        .set('x-access-token', employeeToken)
+        .field({ title: 'heydd', caption: 'oh yeah yes' })
+        .attach('image', './test/testpic1.gif')
+        .expect('Content-Type', /json/)
+        .expect(201)
+        .end((err, res) => {
+          assert.equal(res.body.status, 'success');
+          expect(res.body).to.have.property('data').and.property('message').to.equal('Gif uploaded successfully');
+          expect(res.body).to.have.property('data').and.property('gifId');
+          expect(res.body).to.have.property('data').and.property('createdOn');
+          expect(res.body).to.have.property('data').and.property('title');
+          expect(res.body).to.have.property('data').and.property('imageURL');
+          if (err) return done(err);
+          done();
+
+        })
+      done();
+    });
+
+    it('should not create a new gif if uploaded image is not gif mimetype', (done) => {
+
+      request(app).post('/api/v1/gifs')
+        .set('x-access-token', employeeToken)
+        .field({ title: 'hey', caption: 'oh yeah yes' })
+        .attach('image', './test/testpic2.jpg')
+        .expect('Content-Type', /json/)
+        .expect(400)
+        .end((err, res) => {
+          assert.equal(res.body.status, 'error');
+          expect(res.body).to.have.property('message').to.equal('Selected image must be GIF');
+         
+          if (err) return done(err);
+          done();
+
+        })
+    });
+
+    it('should not create a new gif if title is not provided', (done) => {
+
+      request(app).post('/api/v1/gifs')
+        .set('x-access-token', employeeToken)
+        .field({ caption: 'oh yeah yes' })
+        .attach('image', './test/testpic1.gif')
+        .expect('Content-Type', /json/)
+        .expect(400)
+        .end((err, res) => {
+          assert.equal(res.body.status, 'error');
+          expect(res.body).to.have.property('message').to.equal('You need to provide a title');
+         
+          if (err) return done(err);
+          done();
+
+        })
+    });
+
+    it('should not create a new gif if gif is not provided', (done) => {
+
+      request(app).post('/api/v1/gifs')
+        .set('x-access-token', employeeToken)
+        .field({ title:`Yess`, caption: 'oh yeah yes' })
+        .attach('image', '')
+        .expect('Content-Type', /json/)
+        .expect(400)
+        .end((err, res) => {
+          assert.equal(res.body.status, 'error');
+          expect(res.body).to.have.property('message').to.equal('No files were uploaded.');
+         
+          if (err) return done(err);
+          done();
+
+        })
+    });
+    
+  })
+
+
+
+
+
+
+  
+
+
+
 })

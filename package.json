@@ -4,7 +4,7 @@
   "description": "Teamwork is an internal social network for employees of an organization. The goal of this",
   "main": "server.js",
   "scripts": {
-    "test": "mocha --require babel-core/register --exit",
+    "test": "mocha --require babel-core/register --timeout 15000",
     "lint": "eslint",
     "start": "nodemon --exec babel-node server.js"
   },

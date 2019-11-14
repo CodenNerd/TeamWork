@@ -1,7 +1,7 @@
 import vision from '@google-cloud/vision';
 
 const ScreenImage = {
-    async screen(req, res) {
+    async screen(req, res, done) {
             const prevResponse = req.response;
             let adult_content;
         try {
@@ -16,7 +16,7 @@ const ScreenImage = {
             response: prevResponse,
             adult_content
         });
-
+        
     }
 }
 
