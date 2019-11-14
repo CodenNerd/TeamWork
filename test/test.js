@@ -483,7 +483,8 @@ describe('TeamWork App', () => {
 
   })
 
-  describe('PUT edit an article', () => {
+
+  describe('PATCH edit an article', () => {
     const article = {
       title: `Testing edit`,
       content: `djdd sdkdh`,
@@ -558,6 +559,47 @@ describe('TeamWork App', () => {
 
         })
     });
+
+   
+  })
+
+  describe('DELETE remove an article', () => {
+    
+    it('should delete an existing article', (done) => {
+      request(app).delete(`/api/v1/articles/${articleId}`)
+        .set('x-access-token', employeeToken)
+        .expect('Content-Type', /json/)
+        .expect(200)
+        .end((err, res) => {
+          expect(res.body.response).to.have.property('deleteArticle').and.property('status').to.equal('success');
+          expect(res.body.response).to.have.property('deleteArticle').and.property('data').and.property('message').to.equal('Article successfully deleted');
+          expect(res.body.response).to.have.property('deleteComments').and.property('status').to.equal('success');
+          expect(res.body.response).to.have.property('deleteComments').and.property('data').and.property('message').to.equal('Article comments successfully deleted');
+          expect(res.body.response).to.have.property('deleteLikes').and.property('status').to.equal('success');
+          expect(res.body.response).to.have.property('deleteLikes').and.property('data').and.property('message').to.equal('Article likes successfully deleted');
+          
+          if (err) return done(err);
+          done();
+
+        })
+    });
+
+    it('should not delete article if id param is wrong', (done) => {
+      request(app).delete(`/api/v1/articles/12345`)
+        .set('x-access-token', employeeToken)
+        .expect('Content-Type', /json/)
+        .expect(500)
+        .end((err, res) => {
+          assert.equal(res.body.status, 'error');
+         expect(res.body).to.have.property('message').to.equal('could not verify article');
+          
+          if (err) return done(err);
+          done();
+
+        })
+    });
+
+    
 
    
   })

@@ -21,7 +21,7 @@ const deleteArticle = {
                 })
             }
         } catch (err) {
-            return res.status(400).send({
+            return res.status(500).send({
                 status: `error`,
                 message: `could not verify article`
             })
