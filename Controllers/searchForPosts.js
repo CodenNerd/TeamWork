@@ -49,7 +49,7 @@ const getPosts = {
 
         return res.status(200).send({
             status: `success`,
-            searchResult
+            data: searchResult
         })
     }
 }
