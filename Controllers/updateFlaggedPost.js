@@ -4,7 +4,7 @@ import Helper from './Helper'
 
 const flagPost = {
     async flag(req, res) {
-        if (req.user.userType !== 'admin') return res.status(401).send({ status:`error`, message: `You're not allowed to perform this task`});
+        if (req.user.userType !== 'admin') return res.status(401).send({ status: `error`, message: `You're not allowed to perform this task` });
         let { flagstatus } = req.body;
 
         if (!Helper.isValidUUID(req.params.flagId)) {
@@ -13,13 +13,13 @@ const flagPost = {
                 message: `Wrong postID`
             })
         }
-        if(flagstatus!=='resolved' && flagstatus!=='pending'){
+        if (flagstatus !== 'resolved' && flagstatus !== 'pending') {
             return res.status(400).send({
                 status: `error`,
                 message: `Wrong flag status`
             })
         }
-        
+
         const values = [
             flagstatus,
             req.params.flagId
@@ -28,14 +28,16 @@ const flagPost = {
             const query = `UPDATE teamwork.flags SET flagstatus=$1 WHERE flagid = $2 returning *`;
             const { rows } = await pool.query(query, values);
             if (!rows[0]) {
-                return res.status(500).send({
+                return res.status(400).send({
                     status: `error`,
                     message: `Not a flagged post`
                 })
             }
             return res.status(201).send({
                 status: `success`,
-                message: `flag updated successfully`,
+                data: {
+                    message: `flag updated successfully`,
+                },
                 rows
             })
         }

@@ -25,6 +25,7 @@ describe('TeamWork App', () => {
   let employeeId;
   let likeId;
   let commentId;
+  let flagId;
   describe('POST a new user', () => {
     it('should create a new user', (done) => {
       const user = {
@@ -1017,7 +1018,7 @@ describe('GET all posts', () => {
         })
     });
 
-    it('should like a post if liked posttype is wrong', (done) => {
+    it('should not like a post if likedposttype is wrong', (done) => {
       request(app).post(`/api/v1/posts/${articleId}/likes`)
         .set('x-access-token', employeeToken)
         .send({likedposttype: 'whatever'})
@@ -1122,9 +1123,291 @@ describe('GET all posts', () => {
     });
   })
 
+  describe('GET posts by tag', () => {
+    
+    it('should retrieve article of a tag', (done) => {
+      request(app).get(`/api/v1/articles/tags/tech`)
+        .set('x-access-token', employeeToken)
+        .expect('Content-Type', /json/)
+        .expect(200)
+        .end((err, res) => {
+          console.log(res.body)
+          assert.equal(res.body.status, 'success');
+          expect(res.body.data[0]).to.have.property('articleid');
+          expect(res.body.data[0]).to.have.property('title');
+          expect(res.body.data[0]).to.have.property('articleauthorid');
+          expect(res.body.data[0]).to.have.property('articlebody');
 
+          if (err) return done(err);
+          done();
+
+        })
+    });
+
+    it('should show feedback if tag is not found', (done) => {
+      request(app).get(`/api/v1/articles/tags/mushin`)
+        .set('x-access-token', employeeToken)
+        .expect('Content-Type', /json/)
+        .expect(404)
+        .end((err, res) => {
+          assert.equal(res.body.status, 'error');
+          assert.equal(res.body.message, 'No article in this category yet.');
+
+          if (err) return done(err);
+          done();
+
+        })
+    });
+
+
+    it('should not retrieve tagged article if user is not an employee', (done) => {
+      request(app).get(`/api/v1/articles/tech`)
+        .set('x-access-token', initialAuthToken)
+        .expect('Content-Type', /json/)
+        .expect(401)
+        .end((err, res) => {
+          assert.equal(res.body.status, 'error');
+          assert.equal(res.body.message, 'please create an employee account to perform this task');
+
+          if (err) return done(err);
+          done();
+
+        })
+    });
+  })
+
+
+  describe('POST flag a post', () => {
+    let flaggedposttype = `article`;
+
+    it('should flag a particular post', (done) => {
+      request(app).post(`/api/v1/posts/${articleId}/flags`)
+        .set('x-access-token', employeeToken)
+        .send({flaggedposttype})
+        .expect('Content-Type', /json/)
+        .expect(201)
+        .end((err, res) => {
+          assert.equal(res.body.status, 'success');
+          expect(res.body.data).to.have.property('message').to.equal('post flagged successfully');
+          
+          if (err) return done(err);
+          done();
+
+        })
+    });
+
+    it('should not flag a post which has already been flagged', (done) => {
+      request(app).post(`/api/v1/posts/${articleId}/flags`)
+        .set('x-access-token', employeeToken)
+        .send({flaggedposttype})
+        .expect('Content-Type', /json/)
+        .expect(400)
+        .end((err, res) => {
+          assert.equal(res.body.status, 'error');
+          expect(res.body).to.have.property('message').to.equal('post flagged already');
+          
+          if (err) return done(err);
+          done();
+
+        })
+    });
+
+    it('should not flag a post if flagger is not an employee', (done) => {
+      request(app).post(`/api/v1/posts/${articleId}/flags`)
+        .set('x-access-token', initialAuthToken)
+        .send({flaggedposttype})
+        .expect('Content-Type', /json/)
+        .expect(401)
+        .end((err, res) => {
+          assert.equal(res.body.status, 'error');
+          expect(res.body).to.have.property('message').to.equal('please create an employee account to perform this task');
+          
+          if (err) return done(err);
+          done();
+
+        })
+    });
+
+
+    it('should not flag a post if flaggedposttype is wrong', (done) => {
+      request(app).post(`/api/v1/posts/${articleId}/flags`)
+        .set('x-access-token', employeeToken)
+        .send({likedposttype: 'whatever'})
+        .expect('Content-Type', /json/)
+        .expect(400)
+        .end((err, res) => {
+          assert.equal(res.body.status, 'error');
+          expect(res.body).to.have.property('message').to.equal('Wrong post type');
+          
+          if (err) return done(err);
+          done();
+
+        })
+    });
+    
+
+    it('should not flag a post if flagged post id is invalid uuid', (done) => {
+      request(app).post(`/api/v1/posts/123345/likes`)
+        .set('x-access-token', employeeToken)
+        .send({flaggedposttype})
+        .expect('Content-Type', /json/)
+        .expect(400)
+        .end((err, res) => {
+          assert.equal(res.body.status, 'error');
+          expect(res.body).to.have.property('message').to.equal('Wrong postID');
+          
+          if (err) return done(err);
+          done();
+
+        })
+    });
+
+    it('should not flag a post if flagged post does not exist', (done) => {
+      request(app).post(`/api/v1/posts/${fakeId}/flags`)
+        .set('x-access-token', employeeToken)
+        .send({flaggedposttype})
+        .expect('Content-Type', /json/)
+        .expect(400)
+        .end((err, res) => {
+          assert.equal(res.body.status, 'error');
+          expect(res.body).to.have.property('message').to.equal(`${flaggedposttype} not found`);
+          
+          if (err) return done(err);
+          done();
+
+        })
+    });
+
+  })
+
+  describe('GET flagged posts', () => {
+    
+    it('should retrieve flagged post', (done) => {
+      request(app).get(`/api/v1/posts/flags`)
+        .set('x-access-token', initialAuthToken)
+        .expect('Content-Type', /json/)
+        .expect(200)
+        .end((err, res) => {
+          assert.equal(res.body.status, 'success');
+          expect(res.body.data[0]).to.have.property('flagid');
+          expect(res.body.data[0]).to.have.property('complainerid');
+          expect(res.body.data[0]).to.have.property('flaggedpostid');
+          expect(res.body.data[0]).to.have.property('flagstatus');
+          expect(res.body.data[0]).to.have.property('flaggedposttype');
+
+          flagId = res.body.data[0].flagid;
+          if (err) return done(err);
+          done();
+
+        })
+    });
+
+    it('should not retrieve tagged article if user is not an admin', (done) => {
+      request(app).get(`/api/v1/posts/flags`)
+        .set('x-access-token', employeeToken)
+        .expect('Content-Type', /json/)
+        .expect(401)
+        .end((err, res) => {
+          assert.equal(res.body.status, 'error');
+          assert.equal(res.body.message, 'you need an admin account to perform this task');
+
+          if (err) return done(err);
+          done();
+
+        })
+    });
+  })
 
   
+  describe('PATCH update a flag', () => {
+    let flagstatus = `resolved`;
+
+    it('should set a pending flag as resolved', (done) => {
+      request(app).patch(`/api/v1/posts/flags/${flagId}`)
+        .set('x-access-token', initialAuthToken)
+        .send({flagstatus})
+        .expect('Content-Type', /json/)
+        .expect(201)
+        .end((err, res) => {
+          console.log(res.body);
+          assert.equal(res.body.status, 'success');
+          expect(res.body.data).to.have.property('message').to.equal('flag updated successfully');
+          
+          if (err) return done(err);
+          done();
+
+        })
+    });
+
+    it('should update a flag if flagstatus is wrong', (done) => {
+      request(app).patch(`/api/v1/posts/flags/${flagId}`)
+        .set('x-access-token', initialAuthToken)
+        .send({flagstatus: `nonsense`})
+        .expect('Content-Type', /json/)
+        .expect(400)
+        .end((err, res) => {
+          assert.equal(res.body.status, 'error');
+          expect(res.body).to.have.property('message').to.equal('Wrong flag status');
+          
+          if (err) return done(err);
+          done();
+
+        })
+    });
+
+     it('should update a flag if flagger is not an admin', (done) => {
+      request(app).patch(`/api/v1/posts/flags/${flagId}`)
+      .set('x-access-token', employeeToken)
+      .send({flagstatus})
+        .expect('Content-Type', /json/)
+        .expect(401)
+        .end((err, res) => {
+          assert.equal(res.body.status, 'error');
+          expect(res.body).to.have.property('message').to.equal(`You're not allowed to perform this task`);
+          
+          if (err) return done(err);
+          done();
+
+        })
+    });
+
+
+    it('should not flag a post if flagged post id is invalid uuid', (done) => {
+      request(app).patch(`/api/v1/posts/flags/${flagId}ss`)
+      .set('x-access-token', initialAuthToken)
+      .send({flagstatus})
+        .expect('Content-Type', /json/)
+        .expect(400)
+        .end((err, res) => {
+          assert.equal(res.body.status, 'error');
+          expect(res.body).to.have.property('message').to.equal('Wrong postID');
+          
+          if (err) return done(err);
+          done();
+
+        })
+    });
+
+    it('should update flag if post is not flagged', (done) => {
+      request(app).patch(`/api/v1/posts/flags/${fakeId}`)
+      .set('x-access-token', initialAuthToken)
+      .send({flagstatus})
+        .expect('Content-Type', /json/)
+        .expect(400)
+        .end((err, res) => {
+          assert.equal(res.body.status, 'error');
+          expect(res.body).to.have.property('message').to.equal(`Not a flagged post`);
+          
+          if (err) return done(err);
+          done();
+
+        })
+    });
+
+  })
+
+
+
   describe('DELETE a comment', () => {
     
     it('should delete a post comment', (done) => {
@@ -1201,6 +1484,7 @@ describe('DELETE remove a like', () => {
     });
 
   })
+
 
 
   // describe('DELETE remove an article', () => {

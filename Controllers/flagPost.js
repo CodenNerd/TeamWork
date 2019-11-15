@@ -80,7 +80,9 @@ const flagPost = {
             }
             return res.status(201).send({
                 status: `success`,
+                data:{
                 message: `post flagged successfully`,
+                },
                 rows
             })
         }

@@ -60,7 +60,7 @@ api.delete('/posts/:postId/comments/:commentId', Auth, deleteComment);
 
 api.get('/articles/tags/:tag', Auth, getTagArticles);
 
-api.post('/posts/:postId/flag', Auth, flagPost);
+api.post('/posts/:postId/flags', Auth, flagPost);
 api.get('/posts/flags', Auth, getFlaggedPosts);
 api.patch('/posts/flags/:flagId', Auth, updateFlaggedPost);
 api.delete('/posts/flags/:flagId', Auth, deleteFlaggedPost)
