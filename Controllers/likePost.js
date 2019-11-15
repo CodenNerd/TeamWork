@@ -78,8 +78,10 @@ const likePost = {
             }
             return res.status(201).send({
                 status: `success`,
+                data:{
                 message: `post liked successfully`,
-                rows
+                },
+                
             })
         }
         catch (err) {
