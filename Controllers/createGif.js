@@ -61,7 +61,7 @@ const createGif = {
                     message: `Error uploading image`
                 })
             }
-            imageURL = result.secure_url;
+            imageURL = result.secure_url+'--'+ result.public_id;
         })
 
         
