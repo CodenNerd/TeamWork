@@ -16,7 +16,7 @@ describe('TeamWork App', () => {
   let likeId;
   let commentId;
   let flagId;
-  
+
   describe('GET an uncovered route', () => {
     it('should show an error object', (done) => {
       request(app).get('/unknown')
@@ -583,7 +583,6 @@ describe('TeamWork App', () => {
         .expect('Content-Type', /json/)
         .expect(201)
         .end((err, res) => {
-          console.log(res.body)
           assert.equal(res.body.status, 'success');
           expect(res.body).to.have.property('data').and.property('message').to.equal('comment posted successfully');
           expect(res.body).to.have.property('data').and.property('articleTitle');
@@ -605,7 +604,6 @@ describe('TeamWork App', () => {
         .expect('Content-Type', /json/)
         .expect(400)
         .end((err, res) => {
-          console.log(res.body)
           assert.equal(res.body.status, 'error');
           assert.equal(res.body.message, 'invalid credentials provided');
           
@@ -623,7 +621,6 @@ describe('TeamWork App', () => {
         .expect('Content-Type', /json/)
         .expect(400)
         .end((err, res) => {
-          console.log(res.body)
           assert.equal(res.body.status, 'error');
           assert.equal(res.body.message, '"commentBody" must be a string');
           
@@ -641,7 +638,7 @@ describe('TeamWork App', () => {
         .expect('Content-Type', /json/)
         .expect(400)
         .end((err, res) => {
-          console.log(res.body)
+
           assert.equal(res.body.status, 'error');
           assert.equal(res.body.message, 'article not found');
           
@@ -666,7 +663,6 @@ describe('TeamWork App', () => {
         .expect('Content-Type', /json/)
         .expect(201)
         .end((err, res) => {
-          console.log(res.body)
           assert.equal(res.body.status, 'success');
           expect(res.body).to.have.property('data').and.property('message').to.equal('comment posted successfully');
           expect(res.body).to.have.property('data').and.property('gifTitle');
@@ -687,7 +683,6 @@ describe('TeamWork App', () => {
         .expect('Content-Type', /json/)
         .expect(400)
         .end((err, res) => {
-          console.log(res.body)
           assert.equal(res.body.status, 'error');
           assert.equal(res.body.message, 'invalid credentials provided');
           
@@ -705,7 +700,6 @@ describe('TeamWork App', () => {
         .expect('Content-Type', /json/)
         .expect(400)
         .end((err, res) => {
-          console.log(res.body)
           assert.equal(res.body.status, 'error');
           assert.equal(res.body.message, '"commentBody" must be a string');
           
@@ -723,7 +717,6 @@ describe('TeamWork App', () => {
         .expect('Content-Type', /json/)
         .expect(400)
         .end((err, res) => {
-          console.log(res.body)
           assert.equal(res.body.status, 'error');
           assert.equal(res.body.message, 'gif not found');
           
@@ -1079,7 +1072,6 @@ describe('GET all posts', () => {
         .expect('Content-Type', /json/)
         .expect(200)
         .end((err, res) => {
-          console.log(res.body)
           assert.equal(res.body.status, 'success');
           expect(res.body.data[0]).to.have.property('likeid');
           
@@ -1132,7 +1124,6 @@ describe('GET all posts', () => {
         .expect('Content-Type', /json/)
         .expect(200)
         .end((err, res) => {
-          console.log(res.body)
           assert.equal(res.body.status, 'success');
           expect(res.body.data[0]).to.have.property('articleid');
           expect(res.body.data[0]).to.have.property('title');
@@ -1330,7 +1321,6 @@ describe('GET all posts', () => {
         .expect('Content-Type', /json/)
         .expect(201)
         .end((err, res) => {
-          console.log(res.body);
           assert.equal(res.body.status, 'success');
           expect(res.body.data).to.have.property('message').to.equal('flag updated successfully');
           
@@ -1612,7 +1602,6 @@ describe('DELETE remove a like', () => {
         .expect('Content-Type', /json/)
         .expect(200)
         .end((err, res) => {
-          console.log(res.body)
           expect(res.body.response).to.have.property('deleteGif').and.property('status').to.equal('success');
           expect(res.body.response).to.have.property('deleteGif').and.property('data').and.property('message').to.equal('gif successfully deleted');
           expect(res.body.response).to.have.property('deleteComments').and.property('status').to.equal('success');
@@ -1642,8 +1631,6 @@ describe('DELETE remove a like', () => {
     });
 
   })
-
-
 
 
 })
