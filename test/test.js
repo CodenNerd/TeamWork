@@ -828,7 +828,63 @@ describe('GET all posts', () => {
 
 
 
- 
+  describe('GET one gif', () => {
+    
+    it('should retrieve a specific gif', (done) => {
+      request(app).get(`/api/v1/gifs/${gifId}`)
+        .set('x-access-token', employeeToken)
+        .expect('Content-Type', /json/)
+        .expect(200)
+        .end((err, res) => {
+          assert.equal(res.body.status, 'success');
+          expect(res.body.data).to.have.property('id');
+          expect(res.body.data).to.have.property('title');
+          expect(res.body.data).to.have.property('createdOn');
+          expect(res.body.data).to.have.property('url');
+          expect(res.body.data).to.have.property('likes');
+          expect(res.body.data).to.have.property('comments');
+
+          if (err) return done(err);
+          done();
+
+        })
+    });
+
+
+    it('should not retrieve a gif if user is not an employee', (done) => {
+      request(app).get(`/api/v1/gifs/${gifId}`)
+        .set('x-access-token', initialAuthToken)
+        .expect('Content-Type', /json/)
+        .expect(401)
+        .end((err, res) => {
+          assert.equal(res.body.status, 'error');
+          assert.equal(res.body.message, 'please create an employee account to perform this task');
+
+          if (err) return done(err);
+          done();
+
+        })
+    });
+
+
+    it('should not retrieve a gif if gif is not found', (done) => {
+      request(app).get(`/api/v1/gifs/69f045c0-0725-11ea-a601-c96ff4552740`)
+        .set('x-access-token', employeeToken)
+        .expect('Content-Type', /json/)
+        .expect(404)
+        .end((err, res) => {
+          assert.equal(res.body.status, 'error');
+          assert.equal(res.body.message, 'Gif not found.');
+
+          if (err) return done(err);
+          done();
+
+        })
+    });
+  })
+
+
+  
 
 
 
