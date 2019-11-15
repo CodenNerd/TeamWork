@@ -3,8 +3,8 @@ import Helper from './Helper';
 
 const deleteFlag = {
     async delete(req, res) {
-     if (req.user.userType !== 'admin') return res.status(401).send({ status: `error`, message: `You're not allowed to perform this task`});
-        let response ={};
+        if (req.user.userType !== 'admin') return res.status(401).send({ status: `error`, message: `You're not allowed to perform this task` });
+        let response = {};
         if (!Helper.isValidUUID(req.params.flagId)) {
             return res.status(400).send({
                 status: `error`,
@@ -34,7 +34,9 @@ const deleteFlag = {
 
                 response.deletePost = {
                     status: `success`,
-                    message: `flagged post deleted successfully`,
+                    data: {
+                        message: `flagged post deleted successfully`,
+                    },
                     rows
                 }
             } catch (error) {
@@ -49,7 +51,7 @@ const deleteFlag = {
             return res.status(500).send({
                 status: `error`,
                 message: `Oops! Could not check flag`,
-                
+
             })
         }
 

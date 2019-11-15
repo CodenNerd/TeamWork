@@ -1407,6 +1407,7 @@ describe('GET all posts', () => {
   })
 
 
+ 
 
   describe('DELETE a comment', () => {
     
@@ -1485,6 +1486,41 @@ describe('DELETE remove a like', () => {
 
   })
 
+  describe('DELETE a flagged post', () => {
+
+    it('should delete flagged post', (done) => {
+      request(app).delete(`/api/v1/posts/flags/${flagId}`)
+        .set('x-access-token', initialAuthToken)
+        .expect('Content-Type', /json/)
+        .expect(200)
+        .end((err, res) => {
+
+          expect(res.body.response).to.have.property('deletePost').and.property('status').to.equal('success');
+          expect(res.body.response).to.have.property('deletePost').and.property('data').and.property('message').to.equal('flagged post deleted successfully');
+          expect(res.body.response).to.have.property('deleteLikes').and.property('status');
+          expect(res.body.response).to.have.property('deleteLikes').and.property('data');
+  
+          if (err) return done(err);
+          done();
+
+        })
+    });
+
+    it('should not delete flagged post if user is not admin', (done) => {
+      request(app).delete(`/api/v1/posts/flags/${flagId}`)
+        .set('x-access-token', employeeToken)
+        .expect('Content-Type', /json/)
+        .expect(401)
+        .end((err, res) => {
+          assert(res.body.status, `error`);
+          assert(res.body.message, `You're not allowed to perform this task`);
+  
+          if (err) return done(err);
+          done();
+
+        })
+    });
+  })
 
 
   // describe('DELETE remove an article', () => {
