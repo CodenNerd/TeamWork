@@ -15,7 +15,7 @@ const getOneEmployee = {
             }
 
             res.status(200).send({
-                status: `error`,
+                status: `success`,
                 data: rows[0]
             })
         } catch (error) {

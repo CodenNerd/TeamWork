@@ -20,7 +20,7 @@ import likePost from '../Controllers/likePost';
 import deleteLike from '../Controllers/deleteLike';
 import getLikes from '../Controllers/getLikes';
 import deleteComment from '../Controllers/deleteComment';
-import getTagArticle from '../Controllers/getTagArticle';
+import getTagArticles from '../Controllers/getTagArticle';
 import flagPost from '../Controllers/flagPost';
 import getFlaggedPosts from '../Controllers/getFlaggedPosts';
 import updateFlaggedPost from '../Controllers/updateFlaggedPost';
@@ -31,40 +31,40 @@ import ScreenObscenity from '../Middleware/ScreenObscenity'
 const api = Router();
 
 api.post('/auth/create-user', Auth, addUser);
-api.post('/signin', signIn);
-api.post('/auth/gifs', Auth, createGif, ScreenObscenity);
-api.post('/auth/gifs/:gifId/share/:recipientId', Auth, shareGif);
-api.post('/auth/articles', Auth, createArticle);
-api.post('/auth/articles/:articleId/share/:recipientId', Auth, shareArticle);
+api.post('/auth/signin', signIn);
+api.post('/gifs', Auth, createGif, ScreenObscenity);
+api.post('/gifs/:gifId/share/:recipientId', Auth, shareGif);
+api.post('/articles', Auth, createArticle);
+api.post('/articles/:articleId/share/:recipientId', Auth, shareArticle);
 
-api.patch('/auth/articles/:articleId', Auth, editArticle);
+api.patch('/articles/:articleId', Auth, editArticle);
 
-api.delete('/auth/articles/:articleId', Auth, deleteArticle);
-api.delete('/auth/gifs/:gifId', Auth, deleteGif);
+api.delete('/articles/:articleId', Auth, deleteArticle);
+api.delete('/gifs/:gifId', Auth, deleteGif);
 
-api.post('/auth/articles/:articleId/comments', Auth, createArticleComment);
-api.post('/auth/gifs/:gifId/comments', Auth, createGifComment);
+api.post('/articles/:articleId/comments', Auth, createArticleComment);
+api.post('/gifs/:gifId/comments', Auth, createGifComment);
 
-api.get('/auth/feed', Auth, getAllPosts);
-api.get('/auth/articles/:articleId', Auth, getOneArticle);
-api.get('/auth/gifs/:gifId', Auth, getOneGif);
+api.get('/feed', Auth, getAllPosts);
+api.get('/articles/:articleId', Auth, getOneArticle);
+api.get('/gifs/:gifId', Auth, getOneGif);
 
-api.get('/auth/employees', Auth, getAllEmployees);
-api.get('/auth/employees/:employeeId', Auth, getOneEmployee);
+api.get('/employees', Auth, getAllEmployees);
+api.get('/employees/:employeeId', Auth, getOneEmployee);
 
-api.post('/auth/posts/:postId/likes', Auth, likePost);
-api.delete('/auth/posts/:postId/likes/:likeId', Auth, deleteLike);
-api.get('/auth/posts/:postId/likes', Auth, getLikes)
+api.post('/posts/:postId/likes', Auth, likePost);
+api.delete('/posts/:postId/likes/:likeId', Auth, deleteLike);
+api.get('/posts/:postId/likes', Auth, getLikes)
 
-api.delete('/auth/posts/:postId/comments/:commentId', Auth, deleteComment);
+api.delete('/posts/:postId/comments/:commentId', Auth, deleteComment);
 
-api.get('/auth/articles/tags/:tag', Auth, getTagArticle);
+api.get('/articles/tags/:tag', Auth, getTagArticles);
 
-api.post('/auth/posts/:postId/flag', Auth, flagPost);
-api.get('/auth/posts/flags', Auth, getFlaggedPosts);
-api.patch('/auth/posts/flags/:flagId', Auth, updateFlaggedPost);
-api.delete('/auth/posts/flags/:flagId', Auth, deleteFlaggedPost)
+api.post('/posts/:postId/flags', Auth, flagPost);
+api.get('/posts/flags', Auth, getFlaggedPosts);
+api.patch('/posts/flags/:flagId', Auth, updateFlaggedPost);
+api.delete('/posts/flags/:flagId', Auth, deleteFlaggedPost)
 
-api.post('/auth/posts/search', Auth, searchForPosts);
+api.post('/posts/search', Auth, searchForPosts);
 
 export default api;

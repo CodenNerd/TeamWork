@@ -40,7 +40,8 @@ const deleteLike = {
         } catch (error) {
             return res.status(500).send({
                 status: `error`,
-                message: 'Sorry, our server is down.'
+                message: 'Sorry, our server is down.',
+                
             });
         }
 

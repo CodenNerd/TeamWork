@@ -16,7 +16,9 @@ const createGif = {
         let { userId } = req.user;
         let { title, caption } = req.body;
         if (!req.files || Object.keys(req.files).length === 0) {
-            return res.status(400).send('No files were uploaded.');
+            return res.status(400).send({
+                status:`error`,
+                message:'No files were uploaded.'});
         }
 
         const { image } = req.files;
@@ -30,22 +32,12 @@ const createGif = {
         if (image.size > 20 * 1024 * 1024) return res.status(400).send({ status: `error`, message: `file size should not exceed 20mb` })
 
         if (!title) {
-            res.status(400).send({
+           return res.status(400).send({
                 status: `error`,
                 message: `You need to provide a title`
             })
         }
-        let imageURL;
-        await cloudinary.uploader.upload(image.tempFilePath, (err, result) => {
-            if (err) {
-                return res.status(500).send({
-                    status: "error",
-                    message: `Error uploading image`
-                })
-            }
-            imageURL = result.secure_url;
-        })
-
+        
         title = title.trim();
         caption = caption.trim();
 
@@ -60,6 +52,19 @@ const createGif = {
                 message: validate.error.details[0].message
             })
         }
+        
+        let imageURL;
+        await cloudinary.uploader.upload(image.tempFilePath, (err, result) => {
+            if (err) {
+                return res.status(500).send({
+                    status: "error",
+                    message: `Error uploading image`
+                })
+            }
+            imageURL = result.secure_url+'--'+ result.public_id;
+        })
+
+        
 
         const query = `INSERT INTO teamwork.gifs(gifID, imageURL, title, caption, authorID, datetime) VALUES($1, $2, $3, $4, $5, $6) returning *`;
         const values = [

@@ -9,19 +9,11 @@ import Helper from './Helper';
 dotenv.config();
 
 const addUser = (req, res) => {
-    if (req.user.userType !== 'admin') return res.status(401).send({ message: 'you are not authorized to do this' });
+    if (req.user.userType !== 'admin') return res.status(401).send({ status:`error`, message: 'you are not authorized to do this' });
 
 
     let { firstName, lastName, email, password, gender, jobRole, userType, department, address } = req.body;
-    firstName = firstName.trim();
-    lastName = lastName.trim();
-    email = email.trim();
-    password = password.trim();
-    gender = gender.trim();
-    jobRole = jobRole.trim();
-    userType = userType.trim();
-    department = department.trim();
-    address = address.trim();
+
     const validate = schema.validate({
         firstName,
         lastName,
@@ -32,24 +24,32 @@ const addUser = (req, res) => {
 
     if (validate.error) {
         return res.status(400).send({
-            error: "validation error",
+            status: "error",
             message: validate.error.details[0].message
         })
     }
 
     if (gender !== "male" && gender !== "female") {
         return res.status(400).send({
-            error: "validation error",
+            status: "error",
             message: "Invalid gender provided"
         })
     }
     if (userType !== "admin" && userType !== "employee") {
         return res.status(400).send({
-            error: "validation error",
+            status: "error",
             message: "Invalid user type provided"
         })
     }
-
+    firstName = firstName.trim();
+    lastName = lastName.trim();
+    email = email.trim();
+    password = password.trim();
+    gender = gender.trim();
+    jobRole = jobRole.trim();
+    userType = userType.trim();
+    department = department.trim();
+    address = address.trim();
     const checkDBQuery = `SELECT * from teamwork.users WHERE email = $1`;
 
 
@@ -57,7 +57,7 @@ const addUser = (req, res) => {
         .then(result => {
             if (result.rowCount) {
                 return res.status(400).send({
-                    status:`error`,
+                    status: `error`,
                     message: `A user with email: ${email} already exists`,
                 })
             }
@@ -83,7 +83,7 @@ const addUser = (req, res) => {
                         pool.query(query, params)
                             .then(({ rows }) => {
 
-                                return res.status(202).send({
+                                return res.status(201).send({
                                     status: "success",
                                     data: {
                                         message: "User account successfully created",
@@ -94,7 +94,6 @@ const addUser = (req, res) => {
 
                             })
                             .catch(e => {
-                                console.error(e);
                                 return res.status(500).send({
                                     status: `error`,
                                     message: 'Oops, our server is down'
@@ -107,7 +106,7 @@ const addUser = (req, res) => {
 
                     }).catch(e => {
                         return res.status(500).send({
-                            status:`error`,
+                            status: `error`,
                             message: `could not hash password`,
                         })
                     })
