@@ -17,7 +17,7 @@ const deleteLike = {
         try {
             const { rows } = await pool.query(query, values);
         
-            return res.status(201).send({
+            return res.status(200).send({
                 status: `success`,
                 data: {
                     message: 'like successfully deleted',

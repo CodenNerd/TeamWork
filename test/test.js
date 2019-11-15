@@ -23,6 +23,7 @@ describe('TeamWork App', () => {
   let gifId;
   let articleId;
   let employeeId;
+  let likeId;
   describe('POST a new user', () => {
     it('should create a new user', (done) => {
       const user = {
@@ -1066,6 +1067,58 @@ describe('GET all posts', () => {
   })
 
 
+  describe('GET retrieve likes for a post', () => {
+    
+    it('should retrieve likes', (done) => {
+      request(app).get(`/api/v1/posts/${articleId}/likes`)
+        .set('x-access-token', employeeToken)
+        .expect('Content-Type', /json/)
+        .expect(200)
+        .end((err, res) => {
+          console.log(res.body)
+          assert.equal(res.body.status, 'success');
+          expect(res.body.data[0]).to.have.property('likeid');
+          
+          likeId = res.body.data[0].likeid;
+          if (err) return done(err);
+          done();
+
+        })
+    });
+
+
+    it('should not retrieve likes if user is not an employee', (done) => {
+      request(app).get(`/api/v1/posts/${articleId}/likes`)
+        .set('x-access-token', initialAuthToken)
+        .expect('Content-Type', /json/)
+        .expect(401)
+        .end((err, res) => {
+          assert.equal(res.body.status, 'error');
+          assert.equal(res.body.message, 'please create an employee account to perform this task');
+
+          if (err) return done(err);
+          done();
+
+        })
+    });
+
+
+    it('should show feedback if post has no like', (done) => {
+      request(app).get(`/api/v1/posts/${fakeId}/likes`)
+        .set('x-access-token', employeeToken)
+        .expect('Content-Type', /json/)
+        .expect(404)
+        .end((err, res) => {
+          assert.equal(res.body.status, 'error');
+          assert.equal(res.body.message, 'No likes yet.');
+          expect(res.body.likes[0]).to.equal(undefined)
+
+          if (err) return done(err);
+          done();
+
+        })
+    });
+  })
 
 
 
@@ -1081,10 +1134,39 @@ describe('GET all posts', () => {
 
 
 
+describe('DELETE remove a like', () => {
+    
+    it('should delete an existing post likes', (done) => {
+      request(app).delete(`/api/v1/posts/${articleId}/likes/${fakeId}`)
+        .set('x-access-token', employeeToken)
+        .expect('Content-Type', /json/)
+        .expect(200)
+        .end((err, res) => {
+          assert.equal(res.body.status, 'success');
+          expect(res.body.data).to.have.property('message').to.equal('like successfully deleted');
+           
+          if (err) return done(err);
+          done();
 
+        })
+    });
 
+    it('should not delete post likes if user is not an employee', (done) => {
+      request(app).delete(`/api/v1/posts/${articleId}/likes/${fakeId}`)
+        .set('x-access-token', initialAuthToken)
+        .expect('Content-Type', /json/)
+        .expect(401)
+        .end((err, res) => {
+          assert.equal(res.body.status, 'error');
+         expect(res.body).to.have.property('message').to.equal('please create an employee account to perform this task');
+          
+          if (err) return done(err);
+          done();
 
+        })
+    });
 
+  })
 
 
   // describe('DELETE remove an article', () => {
