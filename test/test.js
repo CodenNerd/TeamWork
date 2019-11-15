@@ -884,7 +884,42 @@ describe('GET all posts', () => {
   })
 
 
-  
+  describe('GET all employees', () => {
+    
+    it('should retrieve all employees', (done) => {
+      request(app).get(`/api/v1/employees`)
+        .set('x-access-token', employeeToken)
+        .expect('Content-Type', /json/)
+        .expect(200)
+        .end((err, res) => {
+          assert.equal(res.body.status, 'success');
+          expect(res.body.data[0]).to.have.property('id');
+          expect(res.body.data[0]).to.have.property('firstname');
+          expect(res.body.data[0]).to.have.property('lastname');
+          expect(res.body.data[0]).to.have.property('email');
+
+          if (err) return done(err);
+          done();
+
+        })
+    });
+
+
+    it('should not retrieve employees if user is not an employee', (done) => {
+      request(app).get(`/api/v1/employees`)
+        .set('x-access-token', initialAuthToken)
+        .expect('Content-Type', /json/)
+        .expect(401)
+        .end((err, res) => {
+          assert.equal(res.body.status, 'error');
+          assert.equal(res.body.message, 'please create an employee account to perform this task');
+
+          if (err) return done(err);
+          done();
+
+        })
+    });
+  })
 
 
 
