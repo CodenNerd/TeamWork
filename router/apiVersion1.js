@@ -20,7 +20,7 @@ import likePost from '../Controllers/likePost';
 import deleteLike from '../Controllers/deleteLike';
 import getLikes from '../Controllers/getLikes';
 import deleteComment from '../Controllers/deleteComment';
-import getTagArticle from '../Controllers/getTagArticle';
+import getTagArticles from '../Controllers/getTagArticle';
 import flagPost from '../Controllers/flagPost';
 import getFlaggedPosts from '../Controllers/getFlaggedPosts';
 import updateFlaggedPost from '../Controllers/updateFlaggedPost';
@@ -58,7 +58,7 @@ api.get('/posts/:postId/likes', Auth, getLikes)
 
 api.delete('/posts/:postId/comments/:commentId', Auth, deleteComment);
 
-api.get('/articles/tags/:tag', Auth, getTagArticle);
+api.get('/articles/tags/:tag', Auth, getTagArticles);
 
 api.post('/posts/:postId/flag', Auth, flagPost);
 api.get('/posts/flags', Auth, getFlaggedPosts);

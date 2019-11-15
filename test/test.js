@@ -24,6 +24,7 @@ describe('TeamWork App', () => {
   let articleId;
   let employeeId;
   let likeId;
+  let commentId;
   describe('POST a new user', () => {
     it('should create a new user', (done) => {
       const user = {
@@ -789,7 +790,7 @@ describe('GET all posts', () => {
           expect(res.body.data).to.have.property('article');
           expect(res.body.data).to.have.property('likes');
           expect(res.body.data).to.have.property('comments');
-
+          commentId = res.body.data.comments[0].commentid
           if (err) return done(err);
           done();
 
@@ -828,6 +829,7 @@ describe('GET all posts', () => {
         })
     });
   })
+
 
 
 
@@ -1122,16 +1124,48 @@ describe('GET all posts', () => {
 
 
 
+  
+  describe('DELETE a comment', () => {
+    
+    it('should delete a post comment', (done) => {
+      request(app).delete(`/api/v1/posts/${articleId}/comments/${commentId}`)
+        .set('x-access-token', employeeToken)
+        .expect('Content-Type', /json/)
+        .expect(200)
+        .end((err, res) => {
+          assert.equal(res.body.response.deleteComment.status, 'success');
+          expect(res.body.response.deleteComment).to.have.property('data').and.property('message').to.equal('comment successfully deleted');
+          assert.equal(res.body.response.deleteLikes.status, 'success');
+          expect(res.body.response.deleteLikes).to.have.property('data').and.property('message').to.equal('comment likes successfully deleted');
+          
 
+          if (err) return done(err);
+          done();
 
+        })
+    });
 
+    // it('should not delete a post comment if user is not an employee', (done) => {
+    //   request(app).delete(`/api/v1/posts/${articleId}/comments/${commentId}`)
+    //     .set('x-access-token', initialAuthToken)
+    //     .expect('Content-Type', /json/)
+    //     .expect(401)
+    //     .end((err, res) => {
+          
+    //       assert.equal(res.body.status, 'error');
+    //      expect(res.body).to.have.property('message').to.equal('please create an employee account to perform this task');
+          
 
+    //       if (err) return done(err);
+    //       done();
 
+    //     })
+    // });
 
-
-
-
-
+    
+  
+   
+  })
 
 
 describe('DELETE remove a like', () => {
