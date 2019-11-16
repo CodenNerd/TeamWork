@@ -5,7 +5,7 @@ import request from 'supertest';
 
 describe('TeamWork App', () => {
   
-  const initialAuthToken = `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIyNjE4ZjYzMC1mZmJlLTExZTktOGU0NS1lM2UzYThlODFkNDEiLCJpYXQiOjE1NzM2ODAwNTAsImV4cCI6MTU3NDI4NDg1MH0.I8jH0LIybusX17Ck27TAGhkn_oYta3_cVJ-9VqocM9o`
+  let initialAuthToken = `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIyNjE4ZjYzMC1mZmJlLTExZTktOGU0NS1lM2UzYThlODFkNDEiLCJpYXQiOjE1NzM2ODAwNTAsImV4cCI6MTU3NDI4NDg1MH0.I8jH0LIybusX17Ck27TAGhkn_oYta3_cVJ-9VqocM9o`
   const fakeId = `69f045c0-0725-11ea-a601-c96ff4552740`;
   let email;
   let password;
@@ -29,6 +29,75 @@ describe('TeamWork App', () => {
   })    
   
   
+
+  describe('POST /auth/signin', () => {
+
+    it('should sign in an admin', (done) => {
+      const user = {
+        email: `aatanda.dammy@gmail.com`,
+        password: `atanda`
+      }
+      request(app).post('/api/v1/auth/signin')
+        .send(user)
+        .expect('Content-Type', /json/)
+        .expect(202)
+        .end((err, res) => {
+          assert.equal(res.body.status, 'success');
+          expect(res.body).to.have.property('data').and.property('message');
+          expect(res.body.data).to.have.property('token');
+          initialAuthToken = res.body.data.token;
+          if (err) return done(err);
+          done();
+        })
+    });
+
+    it('should not sign in if values are not provided ', (done) => {
+      request(app).post('/api/v1/auth/signin')
+        .expect(400)
+        .end((err, res) => {
+          assert.equal(res.body.status, 'error')
+          expect(res.body).to.have.property('message').to.equal('Some values are missing');
+
+          if (err) return done(err);
+
+          done();
+        })
+    });
+
+    it('should not sign in if email is invalid', (done) => {
+      const user = {
+        email: `cjjsj`,
+        password: `sssdd`
+      }
+      request(app).post('/api/v1/auth/signin')
+        .send(user)
+        .end((err, res) => {
+          assert.equal(res.body.status, 'error')
+          assert.equal(res.body.message, 'Please enter a valid email address');
+          if (err) return done(err);
+
+          done();
+        })
+    });
+
+    it('should not sign in if input credentials is not found in db ', (done) => {
+      const user = {
+        email: `aatanda.dammy@gmail.com`,
+        password: `sssppdd`,
+      }
+      request(app).post('/api/v1/auth/signin')
+        .send(user)
+        .expect('Content-Type', /json/)
+        .expect(400)
+        .end((err, res) => {
+          assert.equal(res.body.status, 'error')
+          assert.equal(res.body.message, `Wrong credentials provided`);
+          done();
+        })
+    });
+  })
+
+
   describe('POST a new user', () => {
     it('should create a new user', (done) => {
       const user = {
