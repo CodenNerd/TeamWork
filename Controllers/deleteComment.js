@@ -1,7 +1,7 @@
 import pool from '../Models/queries';
 
-const deleteLike = {
-    async unlike(req, res) {
+const deleteComment = {
+    async delete(req, res) {
         let query;
         let values;        
         let { userId } = req.user;
@@ -74,4 +74,4 @@ const deleteLike = {
     },
 };
 
-export default deleteLike.unlike;
+export default deleteComment.delete;

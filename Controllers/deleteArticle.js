@@ -7,26 +7,7 @@ const deleteArticle = {
        
         let { userId } = req.user;
         let response = {};
-        const verifyUserQuery = `SELECT * FROM teamwork.articles WHERE articleid = $1 and articleauthorid=$2`;
-        const verifyUserValues = [
-            req.params.articleId,
-            userId
-        ]
-        try {
-            const { rows } = await pool.query(verifyUserQuery, verifyUserValues)
-            if (!rows[0]) {
-                return res.status(401).send({
-                    status: `error`,
-                    message: `article not found`
-                })
-            }
-        } catch (err) {
-            return res.status(400).send({
-                status: `error`,
-                message: `could not verify article`
-            })
-        }
-
+        
 
         try {
             const query = `DELETE FROM teamwork.articles WHERE articleid=$1`;
@@ -45,7 +26,7 @@ const deleteArticle = {
         } catch (error) {
             return res.status(500).send({
                 status: `error`,
-                message: 'Sorry, our server is down.'
+                message: 'Sorry, could not delete article'
             });
         }
 
