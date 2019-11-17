@@ -22,7 +22,7 @@ const signin = {
     try {
       const { rows } = await pool.query(text, [req.body.email]);
       if (!rows[0]) {
-        return res.status(400).send({ message: 'Wrong credentials provided' });
+        return res.status(400).send({status:`error`, message: 'Wrong credentials provided'});
       }
       if (!Helper.comparePassword(rows[0].password, req.body.password)) {
         return res.status(400).send({ status:`error`, message: 'Wrong credentials provided' });

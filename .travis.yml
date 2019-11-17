@@ -1,18 +1,14 @@
-env:
-  global:
-  - SECRET=DevCTrainingWithAndelaMyPasswordNiJoor
-  - USER=postgres
-  - HOST=localhost
-  - DB=teamwork
-  - PASSWORD='atanda508'
-  - dbPORT=5432
+
 
 language: node_js
 
 node_js:
   - 10
 
+ 
 addons:
   chrome: stable
 services:
   - postgresql
+before-script:
+  - psql -c 'create database test_db;' -U postgres

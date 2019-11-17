@@ -42,6 +42,7 @@ describe('TeamWork App', () => {
         .expect('Content-Type', /json/)
         .expect(202)
         .end((err, res) => {
+          console.log(res.body)
           assert.equal(res.body.status, 'success');
           expect(res.body).to.have.property('data').and.property('message');
           expect(res.body.data).to.have.property('token');
@@ -247,6 +248,97 @@ describe('TeamWork App', () => {
   })
 
 
+  describe('GET all employees', () => {
+    
+    it('should retrieve all employees', (done) => {
+      request(app).get(`/api/v1/employees`)
+        .set('x-access-token', employeeToken)
+        .expect('Content-Type', /json/)
+        .expect(200)
+        .end((err, res) => {
+          assert.equal(res.body.status, 'success');
+          expect(res.body.data[0]).to.have.property('id');
+          expect(res.body.data[0]).to.have.property('firstname');
+          expect(res.body.data[0]).to.have.property('lastname');
+          expect(res.body.data[0]).to.have.property('email');
+
+          employeeId = res.body.data[0].id;
+          if (err) return done(err);
+          done();
+
+        })
+    });
+
+
+    it('should not retrieve employees if user is not an employee', (done) => {
+      request(app).get(`/api/v1/employees`)
+        .set('x-access-token', initialAuthToken)
+        .expect('Content-Type', /json/)
+        .expect(401)
+        .end((err, res) => {
+          assert.equal(res.body.status, 'error');
+          assert.equal(res.body.message, 'please create an employee account to perform this task');
+
+          if (err) return done(err);
+          done();
+
+        })
+    });
+  })
+
+
+  describe('GET one employee', () => {
+    
+    it('should retrieve a specific employee', (done) => {
+      request(app).get(`/api/v1/employees/${employeeId}`)
+        .set('x-access-token', employeeToken)
+        .expect('Content-Type', /json/)
+        .expect(200)
+        .end((err, res) => {
+          assert.equal(res.body.status, 'success');
+          expect(res.body.data).to.have.property('id').to.equal(employeeId);
+          expect(res.body.data).to.have.property('firstname');
+          expect(res.body.data).to.have.property('lastname');
+          expect(res.body.data).to.have.property('email');
+
+          if (err) return done(err);
+          done();
+
+        })
+    });
+
+
+    it('should not retrieve a employee if user is not an employee', (done) => {
+      request(app).get(`/api/v1/employees/${employeeId}`)
+        .set('x-access-token', initialAuthToken)
+        .expect('Content-Type', /json/)
+        .expect(401)
+        .end((err, res) => {
+          assert.equal(res.body.status, 'error');
+          assert.equal(res.body.message, 'please create an employee account to perform this task');
+
+          if (err) return done(err);
+          done();
+
+        })
+    });
+
+
+    it('should not retrieve an employee if employee is not found', (done) => {
+      request(app).get(`/api/v1/employees/69f045c0-0725-11ea-a601-c96ff4552740`)
+        .set('x-access-token', employeeToken)
+        .expect('Content-Type', /json/)
+        .expect(404)
+        .end((err, res) => {
+          assert.equal(res.body.status, 'error');
+          assert.equal(res.body.message, 'Employee not found.');
+
+          if (err) return done(err);
+          done();
+
+        })
+    });
+  })
 
   describe('POST a new gif', () => {
 
@@ -334,11 +426,12 @@ describe('TeamWork App', () => {
 
   describe('POST share a gif', () => {
     it('should share a gif with an employee', (done) => {
-      request(app).post(`/api/v1/gifs/${gifId}/share/f9041bb0-06fd-11ea-a416-47fb55786b9a`)
+      request(app).post(`/api/v1/gifs/${gifId}/share/${employeeId}`)
         .set('x-access-token', employeeToken)
         .expect('Content-Type', /json/)
         .expect(201)
         .end((err, res) => {
+          console.log(res.body)
           assert.equal(res.body.status, 'success');
           expect(res.body).to.have.property('message').to.equal('GIF shared successfully');
 
@@ -498,7 +591,7 @@ describe('TeamWork App', () => {
 
   describe('POST share an article', () => {
     it('should share an article with an employee', (done) => {
-      request(app).post(`/api/v1/articles/${articleId}/share/f9041bb0-06fd-11ea-a416-47fb55786b9a`)
+      request(app).post(`/api/v1/articles/${articleId}/share/${employeeId}`)
         .set('x-access-token', employeeToken)
         .expect('Content-Type', /json/)
         .expect(201)
@@ -953,97 +1046,7 @@ describe('GET all posts', () => {
   })
 
 
-  describe('GET all employees', () => {
-    
-    it('should retrieve all employees', (done) => {
-      request(app).get(`/api/v1/employees`)
-        .set('x-access-token', employeeToken)
-        .expect('Content-Type', /json/)
-        .expect(200)
-        .end((err, res) => {
-          assert.equal(res.body.status, 'success');
-          expect(res.body.data[0]).to.have.property('id');
-          expect(res.body.data[0]).to.have.property('firstname');
-          expect(res.body.data[0]).to.have.property('lastname');
-          expect(res.body.data[0]).to.have.property('email');
-
-          employeeId = res.body.data[0].id;
-          if (err) return done(err);
-          done();
-
-        })
-    });
-
-
-    it('should not retrieve employees if user is not an employee', (done) => {
-      request(app).get(`/api/v1/employees`)
-        .set('x-access-token', initialAuthToken)
-        .expect('Content-Type', /json/)
-        .expect(401)
-        .end((err, res) => {
-          assert.equal(res.body.status, 'error');
-          assert.equal(res.body.message, 'please create an employee account to perform this task');
-
-          if (err) return done(err);
-          done();
-
-        })
-    });
-  })
-
-
-  describe('GET one employee', () => {
-    
-    it('should retrieve a specific employee', (done) => {
-      request(app).get(`/api/v1/employees/${employeeId}`)
-        .set('x-access-token', employeeToken)
-        .expect('Content-Type', /json/)
-        .expect(200)
-        .end((err, res) => {
-          assert.equal(res.body.status, 'success');
-          expect(res.body.data).to.have.property('id').to.equal(employeeId);
-          expect(res.body.data).to.have.property('firstname');
-          expect(res.body.data).to.have.property('lastname');
-          expect(res.body.data).to.have.property('email');
-
-          if (err) return done(err);
-          done();
-
-        })
-    });
-
-
-    it('should not retrieve a employee if user is not an employee', (done) => {
-      request(app).get(`/api/v1/employees/${employeeId}`)
-        .set('x-access-token', initialAuthToken)
-        .expect('Content-Type', /json/)
-        .expect(401)
-        .end((err, res) => {
-          assert.equal(res.body.status, 'error');
-          assert.equal(res.body.message, 'please create an employee account to perform this task');
-
-          if (err) return done(err);
-          done();
-
-        })
-    });
-
-
-    it('should not retrieve an employee if employee is not found', (done) => {
-      request(app).get(`/api/v1/employees/69f045c0-0725-11ea-a601-c96ff4552740`)
-        .set('x-access-token', employeeToken)
-        .expect('Content-Type', /json/)
-        .expect(404)
-        .end((err, res) => {
-          assert.equal(res.body.status, 'error');
-          assert.equal(res.body.message, 'Employee not found.');
-
-          if (err) return done(err);
-          done();
-
-        })
-    });
-  })
+  
 
 
   describe('POST like a post', () => {
@@ -1510,7 +1513,7 @@ describe('GET all posts', () => {
 
   describe('DELETE a comment', () => {
     
-    it('should delete a post comment', (done) => {
+    it('should delete a post comment if user is an employee', (done) => {
       request(app).delete(`/api/v1/posts/${articleId}/comments/${commentId}`)
         .set('x-access-token', employeeToken)
         .expect('Content-Type', /json/)
@@ -1528,22 +1531,22 @@ describe('GET all posts', () => {
         })
     });
 
-    // it('should not delete a post comment if user is not an employee', (done) => {
-    //   request(app).delete(`/api/v1/posts/${articleId}/comments/${commentId}`)
-    //     .set('x-access-token', initialAuthToken)
-    //     .expect('Content-Type', /json/)
-    //     .expect(401)
-    //     .end((err, res) => {
+    it('should delete a post comment if user is an admin', (done) => {
+      request(app).delete(`/api/v1/posts/${articleId}/comments/${commentId}`)
+        .set('x-access-token', initialAuthToken)
+        .expect('Content-Type', /json/)
+        .expect(200)
+        .end((err, res) => {
           
-    //       assert.equal(res.body.status, 'error');
-    //      expect(res.body).to.have.property('message').to.equal('please create an employee account to perform this task');
+          assert.equal(res.body.response.deleteComment.status, 'success');
+          assert.equal(res.body.response.deleteLikes.status, 'success');
           
 
-    //       if (err) return done(err);
-    //       done();
+          if (err) return done(err);
+          done();
 
-    //     })
-    // });
+        })
+    });
 
     
   
@@ -1647,10 +1650,10 @@ describe('DELETE remove a like', () => {
       request(app).delete(`/api/v1/articles/12345`)
         .set('x-access-token', employeeToken)
         .expect('Content-Type', /json/)
-        .expect(400)
+        .expect(500)
         .end((err, res) => {
           assert.equal(res.body.status, 'error');
-         expect(res.body).to.have.property('message').to.equal('could not verify article');
+         expect(res.body).to.have.property('message').to.equal('Sorry, could not delete article');
           
           if (err) return done(err);
           done();
@@ -1702,4 +1705,4 @@ describe('DELETE remove a like', () => {
   })
 
 
-})
+ })
