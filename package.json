@@ -6,7 +6,8 @@
   "scripts": {
     "test": "set NODE_ENV=test && babel-node test_db dropAllTables && babel-node test_db createSchema && babel-node test_db createAllTables && babel-node test_db createAdmin && mocha --require babel-core/register --timeout 25000",
     "lint": "eslint",
-    "start": "nodemon --exec babel-node server.js"
+    "start": "nodemon --exec babel-node server.js",
+    "coverage": "npm run pretest && jest --coverage && cat ./coverage/lcov.info | coveralls"
   },
   "repository": {
     "type": "git",
