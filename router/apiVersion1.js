@@ -26,7 +26,7 @@ import getFlaggedPosts from '../Controllers/getFlaggedPosts';
 import updateFlaggedPost from '../Controllers/updateFlaggedPost';
 import deleteFlaggedPost from '../Controllers/deleteFlaggedPost';
 import searchForPosts from '../Controllers/searchForPosts';
-import ScreenObscenity from '../Middleware/ScreenObscenity'
+import ScreenObscenity from '../Middleware/ScreenObscenity';
 
 const api = Router();
 
@@ -54,7 +54,7 @@ api.get('/employees/:employeeId', Auth, getOneEmployee);
 
 api.post('/posts/:postId/likes', Auth, likePost);
 api.delete('/posts/:postId/likes/:likeId', Auth, deleteLike);
-api.get('/posts/:postId/likes', Auth, getLikes)
+api.get('/posts/:postId/likes', Auth, getLikes);
 
 api.delete('/posts/:postId/comments/:commentId', Auth, deleteComment);
 
@@ -63,7 +63,7 @@ api.get('/articles/tags/:tag', Auth, getTagArticles);
 api.post('/posts/:postId/flags', Auth, flagPost);
 api.get('/posts/flags', Auth, getFlaggedPosts);
 api.patch('/posts/flags/:flagId', Auth, updateFlaggedPost);
-api.delete('/posts/flags/:flagId', Auth, deleteFlaggedPost)
+api.delete('/posts/flags/:flagId', Auth, deleteFlaggedPost);
 
 api.post('/posts/search', Auth, searchForPosts);
 
