@@ -4,9 +4,10 @@
   "description": "Teamwork is an internal social network for employees of an organization. The goal of this",
   "main": "server.js",
   "scripts": {
-    "test": "set NODE_ENV=test && babel-node test_db dropAllTables && babel-node test_db createSchema && babel-node test_db createAllTables && babel-node test_db createAdmin && mocha --require babel-core/register --timeout 25000",
+    "test": "set NODE_ENV=test && babel-node test_db dropAllTables && babel-node test_db createSchema && babel-node test_db createAllTables && babel-node test_db createAdmin && nyc mocha --require babel-core/register --timeout 25000",
     "lint": "eslint",
-    "start": "nodemon --exec babel-node server.js"
+    "start": "nodemon --exec babel-node server.js",
+    "coverage": "nyc report --reporter=text-lcov | coveralls"
   },
   "repository": {
     "type": "git",
@@ -36,13 +37,16 @@
     "babel-preset-stage-2": "^6.24.1",
     "babel-register": "^6.26.0",
     "chai": "^4.2.0",
-    "eslint": "^6.6.0",
+    "coveralls": "^3.0.7",
+    "eslint": "^4.9.0",
     "eslint-config-airbnb": "^16.1.0",
     "eslint-config-airbnb-base": "^14.0.0",
     "eslint-plugin-import": "^2.7.0",
     "eslint-plugin-jsx-a11y": "^6.0.1",
     "eslint-plugin-react": "^7.4.0",
+    "istanbul": "^0.4.5",
     "mocha": "^6.2.2",
+    "nyc": "^14.1.1",
     "supertest": "^4.0.2"
   },
   "dependencies": {
