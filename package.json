@@ -10,10 +10,7 @@
     "test": "set NODE_ENV=test && babel-node test_db dropAllTables && babel-node test_db createSchema && babel-node test_db createAllTables && babel-node test_db createAdmin && nyc mocha --require babel-core/register --timeout 25000",
     "lint": "eslint",
     "start": "babel-node server.js",
-    "coverage": "nyc report --reporter=text-lcov | coveralls",
-    "clean": "rm -rf build && mkdir build",
-    "build-babel": "babel -d ./build ./src -s",
-    "build": "npm run clean && npm run build-babel"
+    "coverage": "nyc report --reporter=text-lcov | coveralls"
   },
   "repository": {
     "type": "git",
