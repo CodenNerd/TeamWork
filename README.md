@@ -161,13 +161,13 @@ Login response example header:
 
 - Edit Article:  PATCH /articles/:id
 - Delete Article: DELETE /articles/:id
-- Comment POST /gifs/:id/comment
-- Search Articles by Tags: POST /v1/search
+- Comment POST /gifs/:id/comments
+- Search Articles by Tags: POST /search
 #### Gifs
 - Create Gifs: POST /gifs
 - View Gif - GET /gifs/:id
 - Delete Gif DELETE /gifs/:id
-- Comment POST /gifs/:id/comment
+- Comment POST /gifs/:id/comments
 
 #### Feed
 - View all articles and gif: GET /feed
